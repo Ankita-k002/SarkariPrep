@@ -1,0 +1,18 @@
+{
+  "name": "SarkariPrep - Study Helper",
+  "short_name": "SarkariPrep",
+  "description": "Master Indian government exams — one question at a time.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8faf7",
+  "theme_color": "#3d5c38",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/29/29302.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

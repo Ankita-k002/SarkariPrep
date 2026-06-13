@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+study_helper.db
+.env
+.venv/
+venv/
+.gemini/
+task.md
+implementation_plan.md
+walkthrough.md
+*.webp
+*.png
+*.jpg

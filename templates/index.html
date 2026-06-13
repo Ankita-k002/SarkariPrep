@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SarkariPrep - Exam Study Helper</title>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="/manifest.json">
+    <!-- Theme color for phone status bar -->
+    <meta name="theme-color" content="#3d5c38">
+</head>
+<body>
+
+    <!-- Device Frame Wrapper for Desktop Viewers -->
+    <div class="device-wrapper">
+        <div class="phone-frame">
+            <!-- Screen Content Area -->
+            <div class="screen-content">
+
+                <!-- 1. AUTHENTICATION VIEW -->
+                <div id="auth-view" class="view active">
+                    <div class="auth-container">
+                        <!-- Book Rounded Icon Logo -->
+                        <div class="brand-logo-container">
+                            <div class="brand-logo">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+                        </div>
+                        
+                        <h1 class="brand-title">SarkariPrep</h1>
+                        <p class="brand-subtitle">Master Indian government exams — one question at a time.</p>
+
+                        <!-- Tab Slider Toggle -->
+                        <div class="auth-tabs">
+                            <div class="auth-tab-active-bg" id="auth-slider"></div>
+                            <button class="auth-tab active" onclick="switchAuthMode('login')">Log in</button>
+                            <button class="auth-tab" onclick="switchAuthMode('signup')">Sign up</button>
+                        </div>
+
+                        <!-- Form Area -->
+                        <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+                            <div class="input-group">
+                                <label for="auth-name">NAME</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="auth-name" placeholder="Your name" required autocomplete="username">
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="auth-password">PASSWORD</label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="auth-password" placeholder="Password" required autocomplete="current-password">
+                                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
+                                        <i class="fa-regular fa-eye" id="password-eye-icon"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="auth-error-msg" class="error-message"></div>
+
+                            <button type="submit" class="btn-primary" id="auth-btn">Log in</button>
+                        </form>
+
+                        <div class="auth-footer" id="auth-footer-text" onclick="toggleAuthMode()">
+                            New here? Tap Sign up to begin.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. MAIN APP VIEW -->
+                <div id="app-view" class="view">
+                    
+                    <!-- Inner Panels Container (Simulates routes) -->
+                    <div class="panels-container">
+
+                        <!-- A. HOME PANEL -->
+                        <div id="home-panel" class="panel active">
+                            <!-- Header Bar -->
+                            <div class="panel-header">
+                                <div class="user-greeting">
+                                    <span class="greeting-prefix">Namaste,</span>
+                                    <h2 class="user-name" id="home-user-name">User</h2>
+                                </div>
+                                <div class="header-actions">
+                                    <button class="icon-btn" onclick="switchPanel('settings')" title="Settings">
+                                        <i class="fa-solid fa-gear"></i>
+                                    </button>
+                                    <button class="icon-btn logout-btn" onclick="handleLogout()" title="Log out">
+                                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="panel-scrollable">
+                                <!-- Streak and Accuracy Badges -->
+                                <div class="badges-row">
+                                    <div class="badge-item streak-badge">
+                                        <i class="fa-solid fa-fire fire-icon"></i>
+                                        <span id="badge-streak-text">1 day streak</span>
+                                    </div>
+                                    <div class="badge-item accuracy-badge">
+                                        <i class="fa-solid fa-circle-check check-icon"></i>
+                                        <span id="badge-accuracy-text">0.0% accuracy</span>
+                                    </div>
+                                </div>
+
+                                <!-- Continue Learning Banner -->
+                                <div class="promo-card" onclick="startQuiz('General')">
+                                    <div class="promo-content">
+                                        <span class="promo-tag">CONTINUE LEARNING</span>
+                                        <h3 class="promo-title">Start a Mixed Practice Quiz</h3>
+                                        <p class="promo-desc">AI-curated MCQs across all subjects. Unlimited.</p>
+                                        <button class="btn-promo">Start now <i class="fa-solid fa-arrow-right"></i></button>
+                                    </div>
+                                    <div class="promo-image-container">
+                                        <img src="{{ url_for('static', filename='img/study_banner.png') }}" alt="Study Banner" class="promo-image">
+                                    </div>
+                                </div>
+
+                                <!-- Mini Stats Summary -->
+                                <div class="stats-row">
+                                    <div class="stat-box">
+                                        <span class="stat-num attempted" id="home-attempted-count">0</span>
+                                        <span class="stat-label">Attempted</span>
+                                    </div>
+                                    <div class="stat-box">
+                                        <span class="stat-num correct" id="home-correct-count">0</span>
+                                        <span class="stat-label">Correct</span>
+                                    </div>
+                                    <div class="stat-box">
+                                        <span class="stat-num wrong" id="home-wrong-count">0</span>
+                                        <span class="stat-label">Wrong</span>
+                                    </div>
+                                </div>
+
+                                <!-- Choose Exam Title -->
+                                <h3 class="section-title">Choose your exam</h3>
+
+                                <!-- Exam Categories Grid -->
+                                <div class="exams-grid">
+                                    <div class="exam-card" onclick="startQuiz('General')">
+                                        <div class="exam-icon-wrapper general-color">
+                                            <i class="fa-solid fa-globe"></i>
+                                        </div>
+                                        <span class="exam-name">General</span>
+                                    </div>
+                                    <div class="exam-card" onclick="startQuiz('UPSC')">
+                                        <div class="exam-icon-wrapper upsc-color">
+                                            <i class="fa-solid fa-award"></i>
+                                        </div>
+                                        <span class="exam-name">UPSC</span>
+                                    </div>
+                                    <div class="exam-card" onclick="startQuiz('SSC')">
+                                        <div class="exam-icon-wrapper ssc-color">
+                                            <i class="fa-regular fa-file-lines"></i>
+                                        </div>
+                                        <span class="exam-name">SSC</span>
+                                    </div>
+                                    <div class="exam-card" onclick="startQuiz('Banking')">
+                                        <div class="exam-icon-wrapper banking-color">
+                                            <i class="fa-solid fa-money-bill-wave"></i>
+                                        </div>
+                                        <span class="exam-name">Banking</span>
+                                    </div>
+                                    <div class="exam-card" onclick="startQuiz('Railways')">
+                                        <div class="exam-icon-wrapper railways-color">
+                                            <i class="fa-solid fa-train-subway"></i>
+                                        </div>
+                                        <span class="exam-name">Railways</span>
+                                    </div>
+                                    <div class="exam-card" onclick="startQuiz('State PSC')">
+                                        <div class="exam-icon-wrapper psc-color">
+                                            <i class="fa-solid fa-city"></i>
+                                        </div>
+                                        <span class="exam-name">State PSC</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- B. PRACTICE PANEL (Quiz Session Screen) -->
+                        <div id="practice-panel" class="panel">
+                            <!-- Quiz Header -->
+                            <div class="panel-header quiz-header">
+                                <button class="icon-btn" onclick="exitQuiz()" title="Exit Quiz">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                                <div class="quiz-title-area">
+                                    <h2 class="quiz-exam-title" id="quiz-header-title">UPSC Practice</h2>
+                                    <span class="quiz-subject-tag" id="quiz-header-subject">Polity</span>
+                                </div>
+                                <button class="icon-btn" id="quiz-bookmark-btn" onclick="toggleBookmarkCurrentQuestion()" title="Bookmark">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                </button>
+                            </div>
+
+                            <div class="panel-scrollable quiz-body">
+                                <!-- AI generated badge indicator -->
+                                <div class="ai-badge-row" id="ai-pill-indicator" style="display:none;">
+                                    <span class="ai-pill"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Generated MCQ</span>
+                                </div>
+
+                                <!-- Question Card -->
+                                <div class="question-container">
+                                    <p class="question-text" id="quiz-question-text">Loading question...</p>
+                                </div>
+
+                                <!-- MCQ Options List -->
+                                <div class="options-container">
+                                    <button class="option-btn" id="opt-A" onclick="selectOption('A')">
+                                        <span class="option-letter">A</span>
+                                        <span class="option-content" id="opt-A-text">Option A</span>
+                                    </button>
+                                    <button class="option-btn" id="opt-B" onclick="selectOption('B')">
+                                        <span class="option-letter">B</span>
+                                        <span class="option-content" id="opt-B-text">Option B</span>
+                                    </button>
+                                    <button class="option-btn" id="opt-C" onclick="selectOption('C')">
+                                        <span class="option-letter">C</span>
+                                        <span class="option-content" id="opt-C-text">Option C</span>
+                                    </button>
+                                    <button class="option-btn" id="opt-D" onclick="selectOption('D')">
+                                        <span class="option-letter">D</span>
+                                        <span class="option-content" id="opt-D-text">Option D</span>
+                                    </button>
+                                </div>
+
+                                <!-- Loading Shimmer/Spinner for AI generator -->
+                                <div class="quiz-loader" id="quiz-loader" style="display:none;">
+                                    <div class="spinner"></div>
+                                    <p>AI is generating a fresh question...</p>
+                                </div>
+
+                                <!-- Feedback & Explanation Drawer -->
+                                <div class="explanation-drawer" id="explanation-drawer">
+                                    <div class="feedback-header" id="feedback-header">
+                                        <i id="feedback-icon" class="fa-solid"></i>
+                                        <span id="feedback-title">Correct!</span>
+                                    </div>
+                                    <div class="explanation-body">
+                                        <h4 class="explanation-title">EXPLANATION</h4>
+                                        <p class="explanation-text" id="explanation-text">Explanation content goes here.</p>
+                                    </div>
+                                    <button class="btn-primary btn-next" onclick="loadNextQuestion()">Next Question <i class="fa-solid fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- C. HISTORY PANEL -->
+                        <div id="history-panel" class="panel">
+                            <div class="panel-header">
+                                <h2>History</h2>
+                            </div>
+                            
+                            <!-- Filter Tabs inside History -->
+                            <div class="history-filters">
+                                <button class="filter-pill active" onclick="filterHistory('all')">All</button>
+                                <button class="filter-pill" onclick="filterHistory('correct')">Correct</button>
+                                <button class="filter-pill" onclick="filterHistory('wrong')">Wrong</button>
+                                <button class="filter-pill" onclick="filterHistory('bookmarked')">Bookmarked</button>
+                            </div>
+
+                            <div class="panel-scrollable history-list-container" id="history-scrollable">
+                                <div id="history-list" class="history-list">
+                                    <!-- History cards injected here -->
+                                </div>
+                                <div id="history-empty" class="empty-state" style="display:none;">
+                                    <i class="fa-regular fa-folder-open"></i>
+                                    <p>No questions found in this category.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- D. STATS PANEL -->
+                        <div id="stats-panel" class="panel">
+                            <div class="panel-header">
+                                <h2>Statistics Dashboard</h2>
+                            </div>
+                            
+                            <div class="panel-scrollable stats-scrollable">
+                                <!-- Streak Stats -->
+                                <div class="stats-streak-card">
+                                    <div class="streak-details">
+                                        <i class="fa-solid fa-fire streak-big-icon"></i>
+                                        <div>
+                                            <span class="streak-number" id="stats-streak-num">1</span>
+                                            <span class="streak-label">Day Current Streak</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Global Summary Grid -->
+                                <div class="stats-summary-grid">
+                                    <div class="stat-item-card card-total">
+                                        <span class="num" id="stats-total-attempted">0</span>
+                                        <span class="lbl">Attempted</span>
+                                    </div>
+                                    <div class="stat-item-card card-accuracy">
+                                        <span class="num" id="stats-overall-accuracy">0%</span>
+                                        <span class="lbl">Accuracy Rate</span>
+                                    </div>
+                                    <div class="stat-item-card card-correct">
+                                        <span class="num" id="stats-total-correct">0</span>
+                                        <span class="lbl">Correct</span>
+                                    </div>
+                                    <div class="stat-item-card card-wrong">
+                                        <span class="num" id="stats-total-wrong">0</span>
+                                        <span class="lbl">Wrong</span>
+                                    </div>
+                                </div>
+
+                                <!-- Progress Breakdown Headers -->
+                                <h3 class="stats-section-title">Accuracy by Subject</h3>
+                                <div class="progress-breakdown-list" id="stats-subject-list">
+                                    <!-- Injected list of subjects and progress bars -->
+                                </div>
+
+                                <h3 class="stats-section-title">Accuracy by Exam Category</h3>
+                                <div class="progress-breakdown-list" id="stats-category-list">
+                                    <!-- Injected list of categories and progress bars -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- E. SETTINGS PANEL -->
+                        <div id="settings-panel" class="panel">
+                            <div class="panel-header">
+                                <button class="icon-btn" onclick="switchPanel('home')" title="Back">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                </button>
+                                <h2>Settings</h2>
+                                <div style="width:40px;"></div> <!-- Spacer -->
+                            </div>
+
+                            <div class="panel-scrollable settings-scrollable">
+                                <div class="settings-group">
+                                    <h3>Question Sourcing Settings</h3>
+                                    
+                                    <div class="setting-row">
+                                        <div class="setting-info">
+                                            <span class="setting-title">Enable AI Question Generation</span>
+                                            <span class="setting-desc">Use large language models to generate new questions dynamically.</span>
+                                        </div>
+                                        <label class="switch">
+                                            <input type="checkbox" id="settings-ai-toggle" onchange="toggleAIFieldVisibility()">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+
+                                    <div class="input-group" id="gemini-key-container" style="display:none;">
+                                        <label for="settings-gemini-key">GEMINI API KEY</label>
+                                        <div class="input-wrapper">
+                                            <input type="password" id="settings-gemini-key" placeholder="Enter Gemini API Key">
+                                            <button type="button" class="password-toggle" onclick="toggleSettingsKeyVisibility()">
+                                                <i class="fa-regular fa-eye" id="settings-key-eye-icon"></i>
+                                            </button>
+                                        </div>
+                                        <span class="input-help">This key is saved locally to authorize requests to Gemini 2.5 Flash.</span>
+                                    </div>
+                                </div>
+
+                                <div class="settings-group text-center">
+                                    <h3>User Info</h3>
+                                    <p class="user-profile-details">Logged in as: <strong id="settings-username">User</strong></p>
+                                    <button class="btn-secondary" onclick="handleLogout()">Log out Account</button>
+                                </div>
+
+                                <div class="settings-save-row">
+                                    <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> <!-- End Panels Container -->
+
+                    <!-- Bottom Tab Bar Navigation -->
+                    <div class="bottom-nav">
+                        <button class="nav-tab active" id="tab-home" onclick="switchPanel('home')">
+                            <i class="fa-solid fa-house"></i>
+                            <span class="nav-label">Home</span>
+                        </button>
+                        <button class="nav-tab" id="tab-practice" onclick="startGeneralQuiz()">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span class="nav-label">Practice</span>
+                        </button>
+                        <button class="nav-tab" id="tab-history" onclick="switchPanel('history')">
+                            <i class="fa-solid fa-clock"></i>
+                            <span class="nav-label">History</span>
+                        </button>
+                        <button class="nav-tab" id="tab-stats" onclick="switchPanel('stats')">
+                            <i class="fa-solid fa-chart-simple"></i>
+                            <span class="nav-label">Stats</span>
+                        </button>
+                    </div>
+
+                </div> <!-- End App View -->
+
+            </div> <!-- End Screen Content Area -->
+        </div> <!-- End Phone Frame -->
+    </div> <!-- End Device Wrapper -->
+
+    <!-- Core App Logic Script -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <!-- Register PWA Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered: ', reg.scope))
+                    .catch(err => console.error('Service Worker registration failed: ', err));
+            });
+        }
+    </script>
+</body>
+</html>
