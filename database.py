@@ -331,7 +331,6 @@ def get_random_question(category=None, subject=None, user_id=None):
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    query = "SELECT * FROM questions"
     params = []
     conditions = []
     
@@ -343,14 +342,50 @@ def get_random_question(category=None, subject=None, user_id=None):
         conditions.append("subject = ?")
         params.append(subject)
         
+    base_where = ""
     if conditions:
-        query += " WHERE " + " AND ".join(conditions)
+        base_where = " AND ".join(conditions)
         
-    query += " ORDER BY RANDOM() LIMIT 1"
+    question = None
     
-    cursor.execute(query, params)
-    question = cursor.fetchone()
-    
+    if user_id:
+        # Phase 1: Try to fetch a question the user has NOT attempted yet
+        query = "SELECT * FROM questions WHERE id NOT IN (SELECT question_id FROM user_attempts WHERE user_id = ?)"
+        if base_where:
+            query += " AND " + base_where
+        query += " ORDER BY RANDOM() LIMIT 1"
+        
+        cursor.execute(query, [user_id] + params)
+        question = cursor.fetchone()
+        
+        # Phase 2: If all questions are attempted, show ones they got wrong in the past (review mistakes)
+        if not question:
+            query = """
+            SELECT * FROM questions 
+            WHERE id IN (
+                SELECT question_id FROM user_attempts 
+                WHERE user_id = ?
+                GROUP BY question_id
+                HAVING SUM(is_correct) = 0
+            )
+            """
+            if base_where:
+                query += " AND " + base_where
+            query += " ORDER BY RANDOM() LIMIT 1"
+            
+            cursor.execute(query, [user_id] + params)
+            question = cursor.fetchone()
+            
+    # Phase 3 (Fallback): Fetch any random question matching the filter
+    if not question:
+        query = "SELECT * FROM questions"
+        if base_where:
+            query += " WHERE " + base_where
+        query += " ORDER BY RANDOM() LIMIT 1"
+        
+        cursor.execute(query, params)
+        question = cursor.fetchone()
+        
     if not question:
         conn.close()
         return None
