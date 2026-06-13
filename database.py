@@ -4,7 +4,7 @@ import os
 from datetime import datetime, date
 
 # Database selection: check if a cloud PostgreSQL database URL is configured
-DATABASE_URL = os.environ.get("POSTGRES_URL") or os.environ.get("DATABASE_URL")
+DATABASE_URL = os.environ.get("POSTGRES_URL") or os.environ.get("DATABASE_URL") or os.environ.get("STORAGE_URL")
 IS_POSTGRES = bool(DATABASE_URL)
 
 if IS_POSTGRES:
