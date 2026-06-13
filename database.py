@@ -43,19 +43,22 @@ class PostgresCursorWrapper:
             
         # Dynamically append RETURNING id to INSERT queries to mimic lastrowid functionality
         query_type = query.strip().split()[0].upper() if query.strip() else ""
-        if query_type == "INSERT" and "RETURNING" not in query.upper():
-            query_temp = query.rstrip('; ') + " RETURNING id"
-            try:
-                if params is not None:
-                    self.cursor.execute(query_temp, params)
-                else:
-                    self.cursor.execute(query_temp)
-                row = self.cursor.fetchone()
-                if row:
-                    self._lastrowid = row[0]
-                return
-            except Exception:
-                pass
+        query_lower = query.lower()
+        if query_type == "INSERT" and "returning" not in query_lower:
+            # Only append RETURNING id for tables that have an auto-incrementing 'id' column and need lastrowid
+            if "into users" in query_lower or "into questions" in query_lower:
+                query_temp = query.rstrip('; ') + " RETURNING id"
+                try:
+                    if params is not None:
+                        self.cursor.execute(query_temp, params)
+                    else:
+                        self.cursor.execute(query_temp)
+                    row = self.cursor.fetchone()
+                    if row:
+                        self._lastrowid = row[0]
+                    return
+                except Exception:
+                    pass
 
         if params is not None:
             return self.cursor.execute(query, params)
