@@ -14,8 +14,16 @@ if IS_POSTGRES:
         
     import psycopg2
     import psycopg2.extras
+    import psycopg2.extensions
     DBIntegrityError = psycopg2.IntegrityError
     DBError = psycopg2.Error
+
+    class PostgresConnectionWrapper(psycopg2.extensions.connection):
+        def cursor(self, *args, **kwargs):
+            if 'cursor_factory' not in kwargs:
+                kwargs['cursor_factory'] = psycopg2.extras.DictCursor
+            pg_cursor = super().cursor(*args, **kwargs)
+            return PostgresCursorWrapper(pg_cursor)
 else:
     DBIntegrityError = sqlite3.IntegrityError
     DBError = sqlite3.Error
@@ -69,15 +77,7 @@ class PostgresCursorWrapper:
 
 def get_db_connection():
     if IS_POSTGRES:
-        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-        original_cursor = conn.cursor
-        # Monkeypatch cursor method to return our DictCursor-based wrapper
-        def dict_cursor(*args, **kwargs):
-            if 'cursor_factory' not in kwargs:
-                kwargs['cursor_factory'] = psycopg2.extras.DictCursor
-            pg_cursor = original_cursor(*args, **kwargs)
-            return PostgresCursorWrapper(pg_cursor)
-        conn.cursor = dict_cursor
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require', connection_factory=PostgresConnectionWrapper)
         return conn
     else:
         conn = sqlite3.connect(DB_PATH)
