@@ -3,6 +3,7 @@ import sys
 import json
 import time
 import requests
+import argparse
 import database
 
 # Check if Gemini API key is provided
@@ -163,8 +164,19 @@ def generate_batch(topic, topic_idx, total_topics, sub_idx):
     return []
 
 def main():
+    parser = argparse.ArgumentParser(description="Generate Current Affairs questions using Gemini API.")
+    parser.add_argument("--start", type=int, default=1, help="Topic index to start from (1-50)")
+    parser.add_argument("--limit", type=int, default=0, help="Number of topics to process in this run (0 for all)")
+    parser.add_argument("--delay", type=float, default=10.0, help="Delay in seconds between API calls (default: 10.0)")
+    args = parser.parse_args()
+
     total_topics = len(TOPICS)
-    print(f"Starting generation of 1000 current affairs questions across {total_topics} topics (2 sub-batches of 10 questions per topic).")
+    start_idx = max(1, min(args.start, total_topics))
+    limit_topics = args.limit if args.limit > 0 else (total_topics - start_idx + 1)
+    end_idx = min(start_idx + limit_topics - 1, total_topics)
+    
+    print(f"Starting generation of current affairs questions.")
+    print(f"Processing topics {start_idx} to {end_idx} (out of {total_topics} total topics).")
     print(f"Target Database: {'PostgreSQL (Neon)' if database.IS_POSTGRES else 'SQLite (Local)'}")
     sys.stdout.flush()
     
@@ -173,7 +185,10 @@ def main():
     
     total_inserted = 0
     
-    for topic_idx, topic in enumerate(TOPICS, 1):
+    # Slice the topics to process
+    topics_to_process = list(enumerate(TOPICS, 1))[start_idx - 1 : end_idx]
+    
+    for topic_idx, topic in topics_to_process:
         for sub_idx in [1, 2]:
             questions = generate_batch(topic, topic_idx, total_topics, sub_idx)
             if not questions:
@@ -208,8 +223,8 @@ def main():
             print(f"  (Part {sub_idx}/2) Successfully inserted {inserted_in_batch} questions. (Total so far: {total_inserted})")
             sys.stdout.flush()
             
-            # Respect Gemini API rate limit: wait 10 seconds before the next call
-            time.sleep(10)
+            # Respect Gemini API rate limit: wait before the next call
+            time.sleep(args.delay)
         
     conn.close()
     print("\n============================================")
