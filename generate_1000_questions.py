@@ -177,11 +177,30 @@ def main():
     
     print(f"Starting generation of current affairs questions.")
     print(f"Processing topics {start_idx} to {end_idx} (out of {total_topics} total topics).")
-    print(f"Target Database: {'PostgreSQL (Neon)' if database.IS_POSTGRES else 'SQLite (Local)'}")
-    sys.stdout.flush()
     
-    conn = database.get_db_connection()
-    cursor = conn.cursor()
+    # Establish dual connections if possible
+    connections = []
+    
+    # 1. Connect to SQLite
+    try:
+        import sqlite3
+        sqlite_conn = sqlite3.connect("study_helper.db")
+        connections.append(("SQLite (Local)", sqlite_conn))
+    except Exception as e:
+        print(f"Warning: Could not connect to SQLite: {e}")
+        
+    # 2. Connect to Postgres
+    postgres_url = os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL") or 'postgresql://user:password@host/neondb?channel_binding=require&sslmode=require'
+    try:
+        import psycopg2
+        from database import PostgresConnectionWrapper
+        pg_conn = psycopg2.connect(postgres_url, sslmode='require', connection_factory=PostgresConnectionWrapper)
+        connections.append(("PostgreSQL (Neon)", pg_conn))
+    except Exception as e:
+        print(f"Warning: Could not connect to PostgreSQL: {e}")
+        
+    print(f"Target Databases: {[name for name, _ in connections]}")
+    sys.stdout.flush()
     
     total_inserted = 0
     
@@ -196,39 +215,53 @@ def main():
                 
             inserted_in_batch = 0
             for q in questions:
+                # Insert into each connected database
+                for db_name, conn in connections:
+                    try:
+                        cursor = conn.cursor()
+                        cursor.execute('''
+                        INSERT INTO questions 
+                        (category, subject, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, is_ai_generated)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+                        ''', (
+                            q["category"],
+                            "Current Affairs",
+                            q["question_text"],
+                            q["option_a"],
+                            q["option_b"],
+                            q["option_c"],
+                            q["option_d"],
+                            q["correct_option"],
+                            q["explanation"]
+                        ))
+                    except Exception as e:
+                        # In case of duplicate or format error
+                        pass
+                inserted_in_batch += 1
+            
+            # Commit on all connections
+            for db_name, conn in connections:
                 try:
-                    # We save all these under subject = 'Current Affairs'
-                    cursor.execute('''
-                    INSERT INTO questions 
-                    (category, subject, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, is_ai_generated)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
-                    ''', (
-                        q["category"],
-                        "Current Affairs",
-                        q["question_text"],
-                        q["option_a"],
-                        q["option_b"],
-                        q["option_c"],
-                        q["option_d"],
-                        q["correct_option"],
-                        q["explanation"]
-                    ))
-                    inserted_in_batch += 1
+                    conn.commit()
                 except Exception as e:
-                    # In case of duplicate or format error
-                    pass
+                    print(f"Error committing to {db_name}: {e}")
                     
-            conn.commit()
             total_inserted += inserted_in_batch
-            print(f"  (Part {sub_idx}/2) Successfully inserted {inserted_in_batch} questions. (Total so far: {total_inserted})")
+            print(f"  (Part {sub_idx}/2) Successfully generated and processed {inserted_in_batch} questions. (Total so far: {total_inserted})")
             sys.stdout.flush()
             
             # Respect Gemini API rate limit: wait before the next call
             time.sleep(args.delay)
         
-    conn.close()
+    # Close all connections
+    for db_name, conn in connections:
+        try:
+            conn.close()
+        except Exception as e:
+            pass
+            
     print("\n============================================")
-    print(f"Generation complete! Inserted {total_inserted} new questions into the database.")
+    print(f"Generation complete! Processed {total_inserted} new questions into the database(s).")
     print("============================================")
     sys.stdout.flush()
 
