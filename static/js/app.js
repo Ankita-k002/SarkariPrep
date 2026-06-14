@@ -25,6 +25,7 @@ let selectedExam = 'General';
 let selectedSubject = '';
 let historyData = [];
 let historyFilter = 'all';
+let optionsTimeout = null;
 
 // Initialize App on DOM Load
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,6 +44,14 @@ function switchPanel(panelId) {
     if (!activeUser && panelId !== 'auth') {
         switchView('auth-view');
         return;
+    }
+    
+    // Clear options delay timeout if navigating away from practice panel
+    if (panelId !== 'practice') {
+        if (optionsTimeout) {
+            clearTimeout(optionsTimeout);
+            optionsTimeout = null;
+        }
     }
     
     // Switch active panel classes
@@ -241,6 +250,18 @@ function fetchQuestion() {
     hasAnswered = false;
     currentQuestion = null;
     
+    // Clear any pending options timeout
+    if (optionsTimeout) {
+        clearTimeout(optionsTimeout);
+        optionsTimeout = null;
+    }
+    
+    // Immediately hide the options container to avoid showing old options or loading state
+    const optionsContainer = document.querySelector('.options-container');
+    if (optionsContainer) {
+        optionsContainer.classList.add('delayed-hide');
+    }
+    
     // Reset buttons and feedback drawer
     const optButtons = document.querySelectorAll('.option-btn');
     optButtons.forEach(btn => {
@@ -303,6 +324,14 @@ function fetchQuestion() {
             
             // Set bookmark icon status
             updateBookmarkIcon(currentQuestion.is_bookmarked === 1);
+            
+            // Show options after a 2-second delay to discourage immediate guessing and foster active recall
+            optionsTimeout = setTimeout(() => {
+                const container = document.querySelector('.options-container');
+                if (container) {
+                    container.classList.remove('delayed-hide');
+                }
+            }, 2000);
         } else {
             document.getElementById('quiz-question-text').innerText = data.message || 'No questions available. Try different category.';
         }
@@ -380,6 +409,11 @@ function loadNextQuestion() {
 }
 
 function exitQuiz() {
+    // Clear any pending options timeout
+    if (optionsTimeout) {
+        clearTimeout(optionsTimeout);
+        optionsTimeout = null;
+    }
     // Back to dashboard
     switchPanel('home');
 }
