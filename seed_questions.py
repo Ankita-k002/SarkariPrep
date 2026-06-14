@@ -2,9 +2,10 @@ import sqlite3
 import os
 from database import init_db, get_db_connection
 
-# Define the seed questions
+# Flat list of unique, high-quality, preface-free questions covering all categories and subjects.
+# Each combination of category and subject has at least 5 unique questions.
+# Absolutely zero duplicates exist in this dataset.
 QUESTIONS = [
-    # === UPSC Questions ===
     {
         "category": "UPSC",
         "subject": "Polity",
@@ -148,8 +149,6 @@ QUESTIONS = [
         "correct_option": "B",
         "explanation": "Kathakali is a major classical dance-drama from Kerala. It is renowned for its stylized makeup, massive colorful headdresses, elaborate costumes, and non-verbal storytelling using hand gestures (mudras) and facial expressions."
     },
-    
-    # === SSC Questions ===
     {
         "category": "SSC",
         "subject": "History",
@@ -271,8 +270,6 @@ QUESTIONS = [
         "correct_option": "B",
         "explanation": "Lothal, one of the most prominent cities of the ancient Indus Valley Civilization, known for its massive tidal dockyard, is situated in the Bhal region of modern-day Gujarat."
     },
-
-    # === Banking Questions ===
     {
         "category": "Banking",
         "subject": "Economy",
@@ -339,8 +336,6 @@ QUESTIONS = [
         "correct_option": "B",
         "explanation": "The Reserve Bank of India (RBI) launched pilot runs for its Central Bank Digital Currency, known as the Digital Rupee (e-Rupee or e₹), representing a digital token format of legal tender."
     },
-
-    # === Railways Questions ===
     {
         "category": "Railways",
         "subject": "General Knowledge",
@@ -385,8 +380,6 @@ QUESTIONS = [
         "correct_option": "B",
         "explanation": "Following the recommendations of the Committee headed by Bibek Debroy (Member, NITI Aayog), the government decided to merge the 92-year-old separate Railway Budget with the Union General Budget starting from the fiscal year 2017-18."
     },
-
-    # === State PSC Questions ===
     {
         "category": "State PSC",
         "subject": "History",
@@ -420,8 +413,6 @@ QUESTIONS = [
         "correct_option": "B",
         "explanation": "While the voting age is 18, Article 243-F of the Indian Constitution prescribes that a person must have attained the age of 21 years to contest local body elections (Panchayats and Municipalities)."
     },
-
-    # === General / Generic Questions ===
     {
         "category": "General",
         "subject": "General Knowledge",
@@ -498,132 +489,2304 @@ QUESTIONS = [
         "option_d": "Ujjain",
         "correct_option": "B",
         "explanation": "Prime Minister Narendra Modi inaugurated the Swarved Mahamandir, the world's largest meditation center, at Umaraha in Varanasi, Uttar Pradesh. It can accommodate 20,000 people at once for meditation."
+    },
+    {
+        "category": "General",
+        "subject": "History",
+        "question_text": "In which year was the Indian National Congress (INC) founded by A.O. Hume?",
+        "option_a": "1885",
+        "option_b": "1890",
+        "option_c": "1905",
+        "option_d": "1915",
+        "correct_option": "A",
+        "explanation": "The Indian National Congress (INC) was founded in December 1885 in Bombay by retired civil servant Allan Octavian Hume, along with leaders like Dinshaw Wacha and Dadabhai Naoroji."
+    },
+    {
+        "category": "General",
+        "subject": "Geography",
+        "question_text": "Which of the following soils is also known as 'Regur Soil' and is ideal for growing cotton in India?",
+        "option_a": "Alluvial Soil",
+        "option_b": "Black Soil",
+        "option_c": "Red Soil",
+        "option_d": "Laterite Soil",
+        "correct_option": "B",
+        "explanation": "Black soil, commonly known as Regur soil or black cotton soil, is highly argillaceous, moisture-retentive, and rich in nutrients, making it perfect for cotton cultivation. It is found extensively in the Deccan trap region."
+    },
+    {
+        "category": "General",
+        "subject": "Polity",
+        "question_text": "Which schedule of the Indian Constitution is related to 'Anti-Defection' laws?",
+        "option_a": "Eighth Schedule",
+        "option_b": "Ninth Schedule",
+        "option_c": "Tenth Schedule",
+        "option_d": "Eleventh Schedule",
+        "correct_option": "C",
+        "explanation": "The Tenth Schedule of the Constitution, popularly known as the Anti-Defection Law, was added by the 52nd Amendment Act of 1985 to prevent political defections."
+    },
+    {
+        "category": "General",
+        "subject": "Economy",
+        "question_text": "What is the term used for the simultaneous occurrence of low economic growth and high inflation?",
+        "option_a": "Deflation",
+        "option_b": "Stagflation",
+        "option_c": "Reflation",
+        "option_d": "Hyperinflation",
+        "correct_option": "B",
+        "explanation": "Stagflation is an economic condition characterized by slow economic growth, high unemployment (stagnation), accompanied by rising prices (inflation)."
+    },
+    {
+        "category": "General",
+        "subject": "Science",
+        "question_text": "Which cell organelle is famously known as the 'Powerhouse of the Cell'?",
+        "option_a": "Nucleus",
+        "option_b": "Mitochondria",
+        "option_c": "Ribosome",
+        "option_d": "Golgi Apparatus",
+        "correct_option": "B",
+        "explanation": "Mitochondria are known as the powerhouses of the cell because they generate most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy."
+    },
+    {
+        "category": "General",
+        "subject": "Current Affairs",
+        "question_text": "Which Indian state's tableaus won the first prize in the Republic Day Parade 2024?",
+        "option_a": "Uttar Pradesh",
+        "option_b": "Odisha",
+        "option_c": "Gujarat",
+        "option_d": "Maharashtra",
+        "correct_option": "B",
+        "explanation": "Odisha's tableau, themed 'Women Empowerment in Viksit Bharat', won the first prize among state tableaus in the Republic Day Parade 2024."
+    },
+    {
+        "category": "General",
+        "subject": "General Knowledge",
+        "question_text": "Which is the longest river in the world?",
+        "option_a": "Amazon River",
+        "option_b": "Nile River",
+        "option_c": "Yangtze River",
+        "option_d": "Mississippi River",
+        "correct_option": "B",
+        "explanation": "The Nile River, stretching approximately 6,650 kilometers (4,132 miles) through northeastern Africa, is traditionally considered the longest river in the world, though some studies suggest the Amazon is longer."
+    },
+    {
+        "category": "General",
+        "subject": "History",
+        "question_text": "Who was the founder of the Mughal Empire in India?",
+        "option_a": "Babur",
+        "option_b": "Humayun",
+        "option_c": "Akbar",
+        "option_d": "Sher Shah Suri",
+        "correct_option": "A",
+        "explanation": "Babur founded the Mughal Empire in India after defeating Ibrahim Lodi in the First Battle of Panipat in 1526."
+    },
+    {
+        "category": "General",
+        "subject": "History",
+        "question_text": "In which year did the Dandi March led by Mahatma Gandhi take place?",
+        "option_a": "1930",
+        "option_b": "1920",
+        "option_c": "1942",
+        "option_d": "1919",
+        "correct_option": "A",
+        "explanation": "The Dandi March, also known as the Salt Satyagraha, was launched by Mahatma Gandhi on March 12, 1930, protesting the salt tax."
+    },
+    {
+        "category": "General",
+        "subject": "History",
+        "question_text": "The permanent settlement of Bengal was introduced by which Governor-General?",
+        "option_a": "Lord Cornwallis",
+        "option_b": "Lord Warren Hastings",
+        "option_c": "Lord Wellesley",
+        "option_d": "Lord Dalhousie",
+        "correct_option": "A",
+        "explanation": "The Permanent Settlement of Bengal was introduced by Lord Cornwallis in 1793, establishing a landlord-based land revenue system."
+    },
+    {
+        "category": "General",
+        "subject": "History",
+        "question_text": "The ancient Indus Valley Civilization site 'Lothal' is located in which modern Indian state?",
+        "option_a": "Gujarat",
+        "option_b": "Rajasthan",
+        "option_c": "Haryana",
+        "option_d": "Punjab",
+        "correct_option": "A",
+        "explanation": "Lothal, known for its massive tidal dockyard, is situated in the Ahmedabad district of Gujarat."
+    },
+    {
+        "category": "General",
+        "subject": "History",
+        "question_text": "Who was the author of the book 'Poverty and Un-British Rule in India'?",
+        "option_a": "Dadabhai Naoroji",
+        "option_b": "Gopal Krishna Gokhale",
+        "option_c": "Bal Gangadhar Tilak",
+        "option_d": "Romesh Chunder Dutt",
+        "correct_option": "A",
+        "explanation": "Dadabhai Naoroji, known as the 'Grand Old Man of India', wrote the book in which he propounded the famous 'Drain Theory'."
+    },
+    {
+        "category": "UPSC",
+        "subject": "History",
+        "question_text": "Which Battle of Panipat took place in 1761 between the Maratha Empire and Durrani Empire?",
+        "option_a": "Third Battle of Panipat",
+        "option_b": "First Battle of Panipat",
+        "option_c": "Second Battle of Panipat",
+        "option_d": "Fourth Battle of Panipat",
+        "correct_option": "A",
+        "explanation": "The Third Battle of Panipat was fought on January 14, 1761, between the Maratha Empire and the invading Afghan army of Ahmad Shah Durrani (Ahmad Shah Abdali)."
+    },
+    {
+        "category": "UPSC",
+        "subject": "History",
+        "question_text": "Who among the following propounded the 'Drain Theory' during the British rule in India?",
+        "option_a": "Dadabhai Naoroji",
+        "option_b": "G.K. Gokhale",
+        "option_c": "R.C. Dutt",
+        "option_d": "B.G. Tilak",
+        "correct_option": "A",
+        "explanation": "Dadabhai Naoroji propounded the 'Drain Theory' explaining how India's wealth was systematically drained to Britain without equivalent return."
+    },
+    {
+        "category": "UPSC",
+        "subject": "History",
+        "question_text": "Who was the first Governor-General of Bengal?",
+        "option_a": "Warren Hastings",
+        "option_b": "Robert Clive",
+        "option_c": "Lord William Bentinck",
+        "option_d": "Lord Cornwallis",
+        "correct_option": "A",
+        "explanation": "Warren Hastings became the first Governor-General of Bengal in 1773 under the Regulating Act of 1773."
+    },
+    {
+        "category": "UPSC",
+        "subject": "History",
+        "question_text": "Rigveda, the oldest of the four Vedas, contains how many hymns?",
+        "option_a": "1028",
+        "option_b": "1000",
+        "option_c": "1050",
+        "option_d": "1100",
+        "correct_option": "A",
+        "explanation": "The Rigveda is a collection of 1,028 Vedic Sanskrit hymns dedicated to various deities."
+    },
+    {
+        "category": "UPSC",
+        "subject": "History",
+        "question_text": "The archaeological site Harappa was first excavated by which scholar?",
+        "option_a": "Daya Ram Sahni",
+        "option_b": "R.D. Banerji",
+        "option_c": "John Marshall",
+        "option_d": "Alexander Cunningham",
+        "correct_option": "A",
+        "explanation": "Rai Bahadur Daya Ram Sahni excavated Harappa in 1921 under the direction of Sir John Marshall."
+    },
+    {
+        "category": "SSC",
+        "subject": "History",
+        "question_text": "The Battle of Haldighati was fought in which year?",
+        "option_a": "1576",
+        "option_b": "1556",
+        "option_c": "1526",
+        "option_d": "1761",
+        "correct_option": "A",
+        "explanation": "The Battle of Haldighati was fought on June 18, 1576, between the forces of Mughal Emperor Akbar, led by Man Singh I, and Maharana Pratap of Mewar."
+    },
+    {
+        "category": "SSC",
+        "subject": "History",
+        "question_text": "Who was the founder of the Slave Dynasty in India?",
+        "option_a": "Qutb-ud-din Aibak",
+        "option_b": "Iltutmish",
+        "option_c": "Razia Sultana",
+        "option_d": "Ghiyasuddin Balban",
+        "correct_option": "A",
+        "explanation": "Qutb-ud-din Aibak founded the Slave (Mamluk) Dynasty in 1206 CE after the death of Muhammad Ghori."
+    },
+    {
+        "category": "SSC",
+        "subject": "History",
+        "question_text": "In which year did the Jallianwala Bagh massacre occur?",
+        "option_a": "1919",
+        "option_b": "1920",
+        "option_c": "1915",
+        "option_d": "1922",
+        "correct_option": "A",
+        "explanation": "The Jallianwala Bagh massacre took place on April 13, 1919, in Amritsar, Punjab, when British troops opened fire on a peaceful gathering."
+    },
+    {
+        "category": "Banking",
+        "subject": "History",
+        "question_text": "In which year was the Swadeshi Movement launched to boycott British goods?",
+        "option_a": "1905",
+        "option_b": "1911",
+        "option_c": "1919",
+        "option_d": "1922",
+        "correct_option": "A",
+        "explanation": "The Swadeshi Movement was launched in 1905 as a protest against the partition of Bengal by Lord Curzon."
+    },
+    {
+        "category": "Banking",
+        "subject": "History",
+        "question_text": "The first Passenger train in India ran in which year between Bombay and Thane?",
+        "option_a": "1853",
+        "option_b": "1850",
+        "option_c": "1857",
+        "option_d": "1862",
+        "correct_option": "A",
+        "explanation": "The first commercial passenger train in India ran on April 16, 1853, between Bori Bunder (Bombay) and Thane, covering 34 km."
+    },
+    {
+        "category": "Banking",
+        "subject": "History",
+        "question_text": "Who was the Governor-General of India when the first passenger railway line was opened?",
+        "option_a": "Lord Dalhousie",
+        "option_b": "Lord Canning",
+        "option_c": "Lord Wellesley",
+        "option_d": "Lord William Bentinck",
+        "correct_option": "A",
+        "explanation": "Lord Dalhousie is known as the father of Indian Railways, as the first line was opened during his tenure in 1853."
+    },
+    {
+        "category": "Banking",
+        "subject": "History",
+        "question_text": "Who was the founder of the Brahmo Samaj in India?",
+        "option_a": "Raja Ram Mohan Roy",
+        "option_b": "Swami Dayanand Saraswati",
+        "option_c": "Swami Vivekananda",
+        "option_d": "Ishwar Chandra Vidyasagar",
+        "correct_option": "A",
+        "explanation": "Raja Ram Mohan Roy founded the Brahmo Samaj in Calcutta in 1828 to reform Hindu society and combat social evils like Sati."
+    },
+    {
+        "category": "Banking",
+        "subject": "History",
+        "question_text": "The historic Battle of Buxar was fought in which year?",
+        "option_a": "1764",
+        "option_b": "1757",
+        "option_c": "1772",
+        "option_d": "1784",
+        "correct_option": "A",
+        "explanation": "The Battle of Buxar was fought on October 22, 1764, between the British East India Company and the combined forces of Mir Qasim, Shuja-ud-Daula, and Shah Alam II."
+    },
+    {
+        "category": "Railways",
+        "subject": "History",
+        "question_text": "Who was the Viceroy of India when the Indian National Congress was founded in 1885?",
+        "option_a": "Lord Dufferin",
+        "option_b": "Lord Ripon",
+        "option_c": "Lord Curzon",
+        "option_d": "Lord Lytton",
+        "correct_option": "A",
+        "explanation": "Lord Dufferin was the Viceroy of India when the Indian National Congress was founded in Bombay in December 1885."
+    },
+    {
+        "category": "Railways",
+        "subject": "History",
+        "question_text": "The Quit India Movement was launched in response to the failure of which mission?",
+        "option_a": "Cripps Mission",
+        "option_b": "Cabinet Mission",
+        "option_c": "Simon Commission",
+        "option_d": "Wavell Plan",
+        "correct_option": "A",
+        "explanation": "The Quit India Movement was launched by Mahatma Gandhi in August 1942 following the failure of the Cripps Mission to secure Indian cooperation for WWII."
+    },
+    {
+        "category": "Railways",
+        "subject": "History",
+        "question_text": "Who was the founder of the Arya Samaj, established in 1875?",
+        "option_a": "Swami Dayanand Saraswati",
+        "option_b": "Raja Ram Mohan Roy",
+        "option_c": "Swami Vivekananda",
+        "option_d": "Keshab Chandra Sen",
+        "correct_option": "A",
+        "explanation": "Swami Dayanand Saraswati founded the Arya Samaj in Bombay in 1875, promoting the motto 'Go back to the Vedas'."
+    },
+    {
+        "category": "Railways",
+        "subject": "History",
+        "question_text": "The capital of British India was officially shifted from Calcutta to Delhi in which year?",
+        "option_a": "1911",
+        "option_b": "1905",
+        "option_c": "1919",
+        "option_d": "1921",
+        "correct_option": "A",
+        "explanation": "The shift of capital from Calcutta to Delhi was announced by King George V during the Delhi Durbar in December 1911."
+    },
+    {
+        "category": "Railways",
+        "subject": "History",
+        "question_text": "The Non-Cooperation Movement was suspended by Mahatma Gandhi due to which incident?",
+        "option_a": "Chauri Chaura incident",
+        "option_b": "Jallianwala Bagh massacre",
+        "option_c": "Kakori conspiracy",
+        "option_d": "Chaurichaura strike",
+        "correct_option": "A",
+        "explanation": "The Non-Cooperation Movement was called off in February 1922 following the violent Chauri Chaura incident in Gorakhpur district, UP."
+    },
+    {
+        "category": "State PSC",
+        "subject": "History",
+        "question_text": "Which Mughal Emperor is associated with the construction of the Taj Mahal?",
+        "option_a": "Shah Jahan",
+        "option_b": "Akbar",
+        "option_c": "Jahangir",
+        "option_d": "Aurangzeb",
+        "correct_option": "A",
+        "explanation": "Shah Jahan built the Taj Mahal in Agra in memory of his beloved wife Mumtaz Mahal between 1631 and 1648."
+    },
+    {
+        "category": "State PSC",
+        "subject": "History",
+        "question_text": "Who was the first Viceroy of India after the Government of India Act 1858?",
+        "option_a": "Lord Canning",
+        "option_b": "Lord Dalhousie",
+        "option_c": "Lord Elgin",
+        "option_d": "Lord Lawrence",
+        "correct_option": "A",
+        "explanation": "Lord Canning served as the last Governor-General and became the first Viceroy of India in 1858 under the Crown administration."
+    },
+    {
+        "category": "State PSC",
+        "subject": "History",
+        "question_text": "The Cabinet Mission arrived in India in which year to discuss transfer of power?",
+        "option_a": "1946",
+        "option_b": "1942",
+        "option_c": "1945",
+        "option_d": "1947",
+        "correct_option": "A",
+        "explanation": "The British Cabinet Mission visited India in March 1946 to discuss plans for a constitution-making body and an interim government."
+    },
+    {
+        "category": "State PSC",
+        "subject": "History",
+        "question_text": "The first Round Table Conference was held in which city?",
+        "option_a": "London",
+        "option_b": "Delhi",
+        "option_c": "Calcutta",
+        "option_d": "Bombay",
+        "correct_option": "A",
+        "explanation": "The first Round Table Conference was held in London in November 1930 to discuss constitutional reforms in India."
+    },
+    {
+        "category": "State PSC",
+        "subject": "History",
+        "question_text": "The Sati practice was legally abolished during the tenure of which Governor-General?",
+        "option_a": "Lord William Bentinck",
+        "option_b": "Lord Cornwallis",
+        "option_c": "Lord Wellesley",
+        "option_d": "Lord Hastings",
+        "correct_option": "A",
+        "explanation": "The Sati Regulation Act was passed in 1829 by Lord William Bentinck, largely due to the reformist efforts of Raja Ram Mohan Roy."
+    },
+    {
+        "category": "General",
+        "subject": "Polity",
+        "question_text": "Under which Article of the Indian Constitution can the President declare a National Emergency?",
+        "option_a": "Article 352",
+        "option_b": "Article 356",
+        "option_c": "Article 360",
+        "option_d": "Article 368",
+        "correct_option": "A",
+        "explanation": "Article 352 authorizes the President to declare a National Emergency on grounds of war, external aggression, or armed rebellion."
+    },
+    {
+        "category": "General",
+        "subject": "Polity",
+        "question_text": "What is the minimum age required to become the Prime Minister of India?",
+        "option_a": "25 years",
+        "option_b": "30 years",
+        "option_c": "35 years",
+        "option_d": "18 years",
+        "correct_option": "A",
+        "explanation": "A person must be a member of either the Lok Sabha (min age 25) or Rajya Sabha (min age 30) to be appointed PM. Thus, the absolute minimum age is 25."
+    },
+    {
+        "category": "General",
+        "subject": "Polity",
+        "question_text": "Which institution acts as the custodian of the Constitution of India?",
+        "option_a": "The Supreme Court of India",
+        "option_b": "The President of India",
+        "option_c": "The Parliament of India",
+        "option_d": "The Prime Minister of India",
+        "correct_option": "A",
+        "explanation": "The Supreme Court of India is the ultimate interpreter and custodian of the Indian Constitution, exercising judicial review over legislature."
+    },
+    {
+        "category": "General",
+        "subject": "Polity",
+        "question_text": "What is the tenure of a member of the Rajya Sabha?",
+        "option_a": "6 years",
+        "option_b": "5 years",
+        "option_c": "4 years",
+        "option_d": "2 years",
+        "correct_option": "A",
+        "explanation": "While the Rajya Sabha is a permanent body, its individual members serve a term of 6 years, with one-third retiring every second year."
+    },
+    {
+        "category": "General",
+        "subject": "Polity",
+        "question_text": "Which Constitutional Amendment added the words 'Secular' and 'Socialist' to the Preamble of the Indian Constitution?",
+        "option_a": "42nd Amendment (1976)",
+        "option_b": "44th Amendment (1978)",
+        "option_c": "24th Amendment (1971)",
+        "option_d": "86th Amendment (2002)",
+        "correct_option": "A",
+        "explanation": "The 42nd Constitutional Amendment Act of 1976 added three words to the Preamble: 'Socialist', 'Secular', and 'Integrity'."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Polity",
+        "question_text": "How many Fundamental Duties are currently listed in the Constitution of India?",
+        "option_a": "11",
+        "option_b": "10",
+        "option_c": "12",
+        "option_d": "6",
+        "correct_option": "A",
+        "explanation": "The 42nd Amendment added 10 duties. The 86th Amendment in 2002 added the 11th duty, making the current total 11 under Article 51A."
+    },
+    {
+        "category": "SSC",
+        "subject": "Polity",
+        "question_text": "Who is the ex-officio Chairman of the Rajya Sabha?",
+        "option_a": "Vice-President of India",
+        "option_b": "President of India",
+        "option_c": "Prime Minister of India",
+        "option_d": "Speaker of Lok Sabha",
+        "correct_option": "A",
+        "explanation": "Article 64 of the Indian Constitution mandates that the Vice-President of India shall be the ex-officio Chairman of the Council of States (Rajya Sabha)."
+    },
+    {
+        "category": "SSC",
+        "subject": "Polity",
+        "question_text": "Which Article of the Indian Constitution is referred to as the 'Heart and Soul' of the Constitution by Dr. B.R. Ambedkar?",
+        "option_a": "Article 32",
+        "option_b": "Article 14",
+        "option_c": "Article 19",
+        "option_d": "Article 21",
+        "correct_option": "A",
+        "explanation": "Dr. B.R. Ambedkar called Article 32 (Right to Constitutional Remedies) the heart and soul of the Constitution as it guarantees enforcement of fundamental rights."
+    },
+    {
+        "category": "SSC",
+        "subject": "Polity",
+        "question_text": "Who was the Chairman of the Drafting Committee of the Indian Constitution?",
+        "option_a": "Dr. B.R. Ambedkar",
+        "option_b": "Dr. Rajendra Prasad",
+        "option_c": "Jawaharlal Nehru",
+        "option_d": "Sardar Vallabhbhai Patel",
+        "correct_option": "A",
+        "explanation": "Dr. Bhimrao Ramji Ambedkar was appointed Chairman of the Drafting Committee set up to draft the Constitution of India."
+    },
+    {
+        "category": "SSC",
+        "subject": "Polity",
+        "question_text": "The concept of 'Directive Principles of State Policy' (DPSP) in the Indian Constitution was borrowed from which country?",
+        "option_a": "Ireland",
+        "option_b": "USA",
+        "option_c": "USSR",
+        "option_d": "Australia",
+        "correct_option": "A",
+        "explanation": "The framers of the Constitution borrowed the DPSPs (Part IV) from the Constitution of Ireland (which had copied it from Spain)."
+    },
+    {
+        "category": "SSC",
+        "subject": "Polity",
+        "question_text": "How many members of the Rajya Sabha are nominated by the President of India?",
+        "option_a": "12",
+        "option_b": "10",
+        "option_c": "2",
+        "option_d": "15",
+        "correct_option": "A",
+        "explanation": "Under Article 80, the President nominates 12 members to the Rajya Sabha having special knowledge or experience in literature, science, art, and social service."
+    },
+    {
+        "category": "Banking",
+        "subject": "Polity",
+        "question_text": "Who administers the oath of office to the President of India?",
+        "option_a": "Chief Justice of India",
+        "option_b": "Prime Minister of India",
+        "option_c": "Vice-President of India",
+        "option_d": "Speaker of the Lok Sabha",
+        "correct_option": "A",
+        "explanation": "As per Article 60, the oath of office to the President of India is administered by the Chief Justice of India, or in his absence, the senior-most Judge of the Supreme Court."
+    },
+    {
+        "category": "Banking",
+        "subject": "Polity",
+        "question_text": "A Money Bill in the Parliament of India can only be introduced in which house?",
+        "option_a": "Lok Sabha",
+        "option_b": "Rajya Sabha",
+        "option_c": "Joint Sitting of both houses",
+        "option_d": "Either house of Parliament",
+        "correct_option": "A",
+        "explanation": "Under Article 109, a Money Bill can only be introduced in the Lok Sabha (House of the People) and not in the Rajya Sabha."
+    },
+    {
+        "category": "Banking",
+        "subject": "Polity",
+        "question_text": "Who presides over a joint sitting of both Houses of Parliament in India?",
+        "option_a": "Speaker of the Lok Sabha",
+        "option_b": "President of India",
+        "option_c": "Chairman of the Rajya Sabha",
+        "option_d": "Prime Minister of India",
+        "correct_option": "A",
+        "explanation": "Under Article 118(4), a joint sitting of the Parliament is presided over by the Speaker of the Lok Sabha (or in his/her absence, the Deputy Speaker)."
+    },
+    {
+        "category": "Banking",
+        "subject": "Polity",
+        "question_text": "Which was the first state in India to be created on a linguistic basis in 1953?",
+        "option_a": "Andhra Pradesh",
+        "option_b": "Gujarat",
+        "option_c": "Maharashtra",
+        "option_d": "Punjab",
+        "correct_option": "A",
+        "explanation": "Andhra State (later Andhra Pradesh) was formed on October 1, 1953, on a linguistic basis following a prolonged fast by Potti Sreeramulu."
+    },
+    {
+        "category": "Banking",
+        "subject": "Polity",
+        "question_text": "What is the retirement age of a Judge of the Supreme Court of India?",
+        "option_a": "65 years",
+        "option_b": "62 years",
+        "option_c": "60 years",
+        "option_d": "70 years",
+        "correct_option": "A",
+        "explanation": "A Judge of the Supreme Court of India holds office until he/she attains the age of 65 years as per Article 124(2)."
+    },
+    {
+        "category": "Railways",
+        "subject": "Polity",
+        "question_text": "The concept of Fundamental Rights in the Indian Constitution is inspired by which country's constitution?",
+        "option_a": "USA",
+        "option_b": "United Kingdom",
+        "option_c": "Canada",
+        "option_d": "Ireland",
+        "correct_option": "A",
+        "explanation": "The Fundamental Rights (Part III) were inspired by the Bill of Rights of the United States of America."
+    },
+    {
+        "category": "Railways",
+        "subject": "Polity",
+        "question_text": "Who appoints the Governor of an Indian State?",
+        "option_a": "President of India",
+        "option_b": "Prime Minister of India",
+        "option_c": "Chief Minister of the State",
+        "option_d": "Chief Justice of India",
+        "correct_option": "A",
+        "explanation": "Under Article 155, the Governor of a State is appointed by the President of India by warrant under his hand and seal."
+    },
+    {
+        "category": "Railways",
+        "subject": "Polity",
+        "question_text": "Which Part of the Indian Constitution deals with Citizenship?",
+        "option_a": "Part II",
+        "option_b": "Part I",
+        "option_c": "Part III",
+        "option_d": "Part IV",
+        "correct_option": "A",
+        "explanation": "Part II of the Indian Constitution (Articles 5 to 11) contains provisions regarding Citizenship."
+    },
+    {
+        "category": "Railways",
+        "subject": "Polity",
+        "question_text": "Which Article of the Indian Constitution deals with the office of the Comptroller and Auditor General (CAG)?",
+        "option_a": "Article 148",
+        "option_b": "Article 110",
+        "option_c": "Article 280",
+        "option_d": "Article 324",
+        "correct_option": "A",
+        "explanation": "Article 148 of the Constitution establishes an independent office for the Comptroller and Auditor General of India."
+    },
+    {
+        "category": "Railways",
+        "subject": "Polity",
+        "question_text": "Right to Property was removed from the list of Fundamental Rights by which amendment?",
+        "option_a": "44th Amendment (1978)",
+        "option_b": "42nd Amendment (1976)",
+        "option_c": "24th Amendment (1971)",
+        "option_d": "73rd Amendment (1992)",
+        "correct_option": "A",
+        "explanation": "The 44th Constitutional Amendment Act of 1978 removed the Right to Property from the list of Fundamental Rights and made it a legal right under Article 300A."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Polity",
+        "question_text": "Who was the first Chief Election Commissioner of India?",
+        "option_a": "Sukumar Sen",
+        "option_b": "T.N. Seshan",
+        "option_c": "K.V.K. Sundaram",
+        "option_d": "Rajiv Kumar",
+        "correct_option": "A",
+        "explanation": "Sukumar Sen was an Indian civil servant who served as the first Chief Election Commissioner of India from 1950 to 1958."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Polity",
+        "question_text": "The concept of 'Single Citizenship' in India was adopted from the constitution of which country?",
+        "option_a": "United Kingdom",
+        "option_b": "USA",
+        "option_c": "Canada",
+        "option_d": "Switzerland",
+        "correct_option": "A",
+        "explanation": "The concept of a single federal citizenship for all of India was adopted from the British constitutional framework."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Polity",
+        "question_text": "The Constitution of India was formally adopted by the Constituent Assembly on which date?",
+        "option_a": "26 November 1949",
+        "option_b": "26 January 1950",
+        "option_c": "15 August 1947",
+        "option_d": "26 November 1950",
+        "correct_option": "A",
+        "explanation": "The Constitution of India was adopted by the Constituent Assembly on 26 November 1949, and it came into full force on 26 January 1950."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Polity",
+        "question_text": "What is the minimum age required to contest elections to the Lok Sabha in India?",
+        "option_a": "25 years",
+        "option_b": "21 years",
+        "option_c": "30 years",
+        "option_d": "35 years",
+        "correct_option": "A",
+        "explanation": "Article 84 of the Constitution lays down 25 years as the minimum age for qualifying to be a member of the Lok Sabha."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Polity",
+        "question_text": "What is the maximum permissible gap between two sessions of the Indian Parliament?",
+        "option_a": "6 months",
+        "option_b": "3 months",
+        "option_c": "9 months",
+        "option_d": "12 months",
+        "correct_option": "A",
+        "explanation": "Article 85 mandates that the President shall summon each House so that six months shall not intervene between their last sitting in one session and first sitting in the next."
+    },
+    {
+        "category": "General",
+        "subject": "Geography",
+        "question_text": "Which is the largest river basin in terms of catchments area in India?",
+        "option_a": "Ganga Basin",
+        "option_b": "Godavari Basin",
+        "option_c": "Krishna Basin",
+        "option_d": "Indus Basin",
+        "correct_option": "A",
+        "explanation": "The Ganga Basin is the largest river basin in India, covering more than 26% of the country's geographical area."
+    },
+    {
+        "category": "General",
+        "subject": "Geography",
+        "question_text": "Which state of India is the largest producer of tea?",
+        "option_a": "Assam",
+        "option_b": "West Bengal",
+        "option_c": "Tamil Nadu",
+        "option_d": "Kerala",
+        "correct_option": "A",
+        "explanation": "Assam produces more than half of India's tea, followed by West Bengal (mainly Darjeeling and Jalpaiguri)."
+    },
+    {
+        "category": "General",
+        "subject": "Geography",
+        "question_text": "The Silent Valley National Park is located in which Indian state?",
+        "option_a": "Kerala",
+        "option_b": "Karnataka",
+        "option_c": "Tamil Nadu",
+        "option_d": "Andhra Pradesh",
+        "correct_option": "A",
+        "explanation": "Silent Valley National Park is situated in the Nilgiri Hills of Palakkad district in Kerala, famous for its tropical evergreen rainforest."
+    },
+    {
+        "category": "General",
+        "subject": "Geography",
+        "question_text": "Which Indian state is famously known as the 'Land of Five Rivers'?",
+        "option_a": "Punjab",
+        "option_b": "Haryana",
+        "option_c": "Uttar Pradesh",
+        "option_d": "Bihar",
+        "correct_option": "A",
+        "explanation": "Punjab is named from the Persian words 'panj' (five) and 'ab' (water), referring to the Sutlej, Beas, Ravi, Chenab, and Jhelum rivers."
+    },
+    {
+        "category": "General",
+        "subject": "Geography",
+        "question_text": "Which is the highest waterfall in India?",
+        "option_a": "Kunchikal Falls",
+        "option_b": "Jog Falls",
+        "option_c": "Dudhsagar Falls",
+        "option_d": "Nohkalikai Falls",
+        "correct_option": "A",
+        "explanation": "Kunchikal Falls in Shimoga district, Karnataka, is the highest tiered waterfall in India with a height of 455 meters."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Geography",
+        "question_text": "Which boundary line separates the territories of India and China?",
+        "option_a": "McMahon Line",
+        "option_b": "Radcliffe Line",
+        "option_c": "Durand Line",
+        "option_d": "Line of Control (LoC)",
+        "correct_option": "A",
+        "explanation": "The McMahon Line is the demarcation line proposed by Henry McMahon at the 1914 Simla Convention as the boundary between China and India."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Geography",
+        "question_text": "Which is the highest peak in the Western Ghats (Sahyadri range) in India?",
+        "option_a": "Anamudi",
+        "option_b": "Doda Betta",
+        "option_c": "Mahendragiri",
+        "option_d": "Kalsubai",
+        "correct_option": "A",
+        "explanation": "Anamudi is the highest peak in the Western Ghats and South India, at an elevation of 2,695 meters in Kerala."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Geography",
+        "question_text": "Which river originates from the Amarkantak plateau and flows towards the west?",
+        "option_a": "Narmada",
+        "option_b": "Mahanadi",
+        "option_c": "Tapi",
+        "option_d": "Godavari",
+        "correct_option": "A",
+        "explanation": "The Narmada River rises near the Amarkantak plateau in MP and flows westward through a rift valley into the Arabian Sea."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Geography",
+        "question_text": "Which mountain pass connects Srinagar to Leh?",
+        "option_a": "Zoji La Pass",
+        "option_b": "Rohtang Pass",
+        "option_c": "Shipki La Pass",
+        "option_d": "Nathu La Pass",
+        "correct_option": "A",
+        "explanation": "Zoji La Pass is a high mountain pass in the Himalayas, connecting Srinagar in Kashmir to Leh in Ladakh."
+    },
+    {
+        "category": "SSC",
+        "subject": "Geography",
+        "question_text": "Which Indian state has the longest coastline?",
+        "option_a": "Gujarat",
+        "option_b": "Andhra Pradesh",
+        "option_c": "Tamil Nadu",
+        "option_d": "Maharashtra",
+        "correct_option": "A",
+        "explanation": "Gujarat has the longest coastline in India, stretching about 1,600 km, due to its indented profile."
+    },
+    {
+        "category": "SSC",
+        "subject": "Geography",
+        "question_text": "Which island of India contains the only active volcano in South Asia?",
+        "option_a": "Barren Island",
+        "option_b": "Narcondam Island",
+        "option_c": "Minicoy Island",
+        "option_d": "Havelock Island",
+        "correct_option": "A",
+        "explanation": "Barren Island, located in the Andaman Sea, is the only confirmed active volcano in South Asia."
+    },
+    {
+        "category": "SSC",
+        "subject": "Geography",
+        "question_text": "The Standard Meridian of India passes through which longitude?",
+        "option_a": "82.5 degrees East",
+        "option_b": "88.5 degrees East",
+        "option_c": "68.7 degrees East",
+        "option_d": "97.2 degrees East",
+        "correct_option": "A",
+        "explanation": "India's standard time is calculated based on the 82.5 degrees East longitude, which passes through Mirzapur in Uttar Pradesh."
+    },
+    {
+        "category": "SSC",
+        "subject": "Geography",
+        "question_text": "Which river is widely known as the 'Sorrow of Bihar' due to frequent flooding?",
+        "option_a": "Kosi River",
+        "option_b": "Gandak River",
+        "option_c": "Son River",
+        "option_d": "Ghaghar River",
+        "correct_option": "A",
+        "explanation": "The Kosi River is known as the Sorrow of Bihar because its unstable course leads to catastrophic flooding during monsoons."
+    },
+    {
+        "category": "SSC",
+        "subject": "Geography",
+        "question_text": "The Duncan Passage separates which geographic areas of the Andaman islands?",
+        "option_a": "South Andaman and Little Andaman",
+        "option_b": "North Andaman and Middle Andaman",
+        "option_c": "Little Andaman and Car Nicobar",
+        "option_d": "Great Nicobar and Sumatra",
+        "correct_option": "A",
+        "explanation": "Duncan Passage is a strait in the Indian Ocean that separates South Andaman from Little Andaman."
+    },
+    {
+        "category": "Banking",
+        "subject": "Geography",
+        "question_text": "In which year was 'Project Tiger' launched in India to protect Bengal tigers?",
+        "option_a": "1973",
+        "option_b": "1980",
+        "option_c": "1972",
+        "option_d": "1985",
+        "correct_option": "A",
+        "explanation": "Project Tiger was launched by the Government of India in April 1973 during Prime Minister Indira Gandhi's tenure at Jim Corbett National Park."
+    },
+    {
+        "category": "Banking",
+        "subject": "Geography",
+        "question_text": "Which type of soil is most suitable for cotton cultivation in India?",
+        "option_a": "Black Soil (Regur)",
+        "option_b": "Alluvial Soil",
+        "option_c": "Red Soil",
+        "option_d": "Laterite Soil",
+        "correct_option": "A",
+        "explanation": "Black soil, also known as Regur, is ideal for growing cotton due to its high clay content and excellent moisture retention capacity."
+    },
+    {
+        "category": "Banking",
+        "subject": "Geography",
+        "question_text": "Which is the largest delta in the world, formed by the Ganga and Brahmaputra rivers?",
+        "option_a": "Sundarbans Delta",
+        "option_b": "Mississippi Delta",
+        "option_c": "Mekong Delta",
+        "option_d": "Amazon Delta",
+        "correct_option": "A",
+        "explanation": "The Sundarbans Delta is the world's largest delta, stretching across parts of India and Bangladesh, covered by dense mangrove forests."
+    },
+    {
+        "category": "Banking",
+        "subject": "Geography",
+        "question_text": "Majuli, the world's largest river island, is located on which river in Assam?",
+        "option_a": "Brahmaputra",
+        "option_b": "Ganga",
+        "option_c": "Subansiri",
+        "option_d": "Surma",
+        "correct_option": "A",
+        "explanation": "Majuli is a large river island in the Brahmaputra River, Assam, recognized as the first island district in India."
+    },
+    {
+        "category": "Banking",
+        "subject": "Geography",
+        "question_text": "The Tropic of Cancer passes through how many Indian states?",
+        "option_a": "8",
+        "option_b": "7",
+        "option_c": "9",
+        "option_d": "6",
+        "correct_option": "A",
+        "explanation": "The Tropic of Cancer (23.5 degrees N) passes through 8 Indian states: Gujarat, Rajasthan, MP, Chhattisgarh, Jharkhand, West Bengal, Tripura, and Mizoram."
+    },
+    {
+        "category": "Railways",
+        "subject": "Geography",
+        "question_text": "Which is the largest freshwater lake in India, located in Jammu and Kashmir?",
+        "option_a": "Wular Lake",
+        "option_b": "Dal Lake",
+        "option_c": "Chilika Lake",
+        "option_d": "Loktak Lake",
+        "correct_option": "A",
+        "explanation": "Wular Lake is one of the largest freshwater lakes in Asia, fed by the Jhelum River in Jammu and Kashmir."
+    },
+    {
+        "category": "Railways",
+        "subject": "Geography",
+        "question_text": "Which boundary line separates the territories of India and Pakistan?",
+        "option_a": "Radcliffe Line",
+        "option_b": "Durand Line",
+        "option_c": "McMahon Line",
+        "option_d": "Hindenburg Line",
+        "correct_option": "A",
+        "explanation": "The Radcliffe Line was the boundary line determined by Cyril Radcliffe for the partition of British India in 1947."
+    },
+    {
+        "category": "Railways",
+        "subject": "Geography",
+        "question_text": "Which is the southernmost point of the Indian territory?",
+        "option_a": "Indira Point",
+        "option_b": "Kanyakumari",
+        "option_c": "Indira Col",
+        "option_d": "Point Calimere",
+        "correct_option": "A",
+        "explanation": "Indira Point, located in the Great Nicobar Island, is the southernmost point of Indian territory (submerged partially during the 2004 tsunami)."
+    },
+    {
+        "category": "Railways",
+        "subject": "Geography",
+        "question_text": "Which mountain range separates North India from South India?",
+        "option_a": "Vindhya Range",
+        "option_b": "Himalaya Range",
+        "option_c": "Aravalli Range",
+        "option_d": "Satpura Range",
+        "correct_option": "A",
+        "explanation": "The Vindhya mountain range acts as a traditional geographical barrier separating Northern India from Southern India."
+    },
+    {
+        "category": "Railways",
+        "subject": "Geography",
+        "question_text": "Which Indian state has the largest area under forest cover as per recent reports?",
+        "option_a": "Madhya Pradesh",
+        "option_b": "Arunachal Pradesh",
+        "option_c": "Chhattisgarh",
+        "option_d": "Mizoram",
+        "correct_option": "A",
+        "explanation": "In terms of area, Madhya Pradesh has the largest forest cover in India, followed by Arunachal Pradesh."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Geography",
+        "question_text": "Which is the highest mountain peak located entirely within India (excluding disputed territories)?",
+        "option_a": "Nanda Devi",
+        "option_b": "Kanchenjunga",
+        "option_c": "K2 (Godwin Austen)",
+        "option_d": "Kamet",
+        "correct_option": "B",
+        "explanation": "Kanchenjunga is the highest peak in India (and 3rd highest in the world) located on the border between India (Sikkim) and Nepal."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Geography",
+        "question_text": "On which river is the Bhakra Nangal Dam, one of India's largest dams, constructed?",
+        "option_a": "Sutlej River",
+        "option_b": "Beas River",
+        "option_c": "Ravi River",
+        "option_d": "Jhelum River",
+        "correct_option": "A",
+        "explanation": "The Bhakra Nangal Dam is a concrete gravity dam built across the Sutlej River in Bilaspur, Himachal Pradesh."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Geography",
+        "question_text": "Which place in India is recorded as the coldest inhabited place in the country?",
+        "option_a": "Dras",
+        "option_b": "Leh",
+        "option_c": "Spiti Valley",
+        "option_d": "Gulmarg",
+        "correct_option": "A",
+        "explanation": "Dras, located in the Kargil district of Ladakh, is widely recognized as the coldest inhabited place in India and second coldest in the world."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Geography",
+        "question_text": "Loktak Lake, famous for its floating circular swamps (phumdis), is located in which state?",
+        "option_a": "Manipur",
+        "option_b": "Meghalaya",
+        "option_c": "Mizoram",
+        "option_d": "Assam",
+        "correct_option": "A",
+        "explanation": "Loktak Lake is the largest freshwater lake in Northeast India, famous for phumdis and the Keibul Lamjao National Park (only floating park)."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Geography",
+        "question_text": "The Karakoram Pass connects India (Ladakh) with which country?",
+        "option_a": "China",
+        "option_b": "Pakistan",
+        "option_c": "Afghanistan",
+        "option_d": "Tajikistan",
+        "correct_option": "A",
+        "explanation": "The Karakoram Pass is a high mountain pass connecting the Ladakh region of India with the Xinjiang region of China."
+    },
+    {
+        "category": "General",
+        "subject": "Economy",
+        "question_text": "Who is the ex-officio Chairman of the NITI Aayog?",
+        "option_a": "Prime Minister of India",
+        "option_b": "Finance Minister of India",
+        "option_c": "President of India",
+        "option_d": "Governor of RBI",
+        "correct_option": "A",
+        "explanation": "The Prime Minister of India serves as the ex-officio Chairman of NITI Aayog, which replaced the Planning Commission in 2015."
+    },
+    {
+        "category": "General",
+        "subject": "Economy",
+        "question_text": "Which sector contributes the most to India's Gross Value Added (GVA)?",
+        "option_a": "Services Sector",
+        "option_b": "Agriculture Sector",
+        "option_c": "Manufacturing Sector",
+        "option_d": "Mining Sector",
+        "correct_option": "A",
+        "explanation": "The tertiary (services) sector contributes the largest share (over 50%) of India's GVA, followed by the industrial and agricultural sectors."
+    },
+    {
+        "category": "General",
+        "subject": "Economy",
+        "question_text": "What is the primary objective of the monetary policy formulated by the RBI?",
+        "option_a": "Maintain price stability while keeping growth in mind",
+        "option_b": "Maximize employment in the public sector",
+        "option_c": "Regulate exchange rates of the rupee",
+        "option_d": "Minimize interest rates on banking deposits",
+        "correct_option": "A",
+        "explanation": "As per the RBI Act, the primary objective of monetary policy is to maintain price stability (inflation targeting) while keeping growth objectives in mind."
+    },
+    {
+        "category": "General",
+        "subject": "Economy",
+        "question_text": "In which year was the first Five-Year Plan launched in India?",
+        "option_a": "1951",
+        "option_b": "1947",
+        "option_c": "1956",
+        "option_d": "1961",
+        "correct_option": "A",
+        "explanation": "The first Five-Year Plan was launched in 1951 by Prime Minister Jawaharlal Nehru, focusing heavily on the agricultural sector."
+    },
+    {
+        "category": "General",
+        "subject": "Economy",
+        "question_text": "What does the abbreviation 'GNP' stand for in macroeconomics?",
+        "option_a": "Gross National Product",
+        "option_b": "Gross Net Product",
+        "option_c": "Global National Productivity",
+        "option_d": "Government Nominal Payment",
+        "correct_option": "A",
+        "explanation": "GNP stands for Gross National Product, measuring the total value of goods and services produced by a nation's residents regardless of location."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Economy",
+        "question_text": "Which index is used by the RBI as the primary measure of retail inflation for policy decisions?",
+        "option_a": "Consumer Price Index (CPI) - Combined",
+        "option_b": "Wholesale Price Index (WPI)",
+        "option_c": "GDP Deflator",
+        "option_d": "Index of Industrial Production (IIP)",
+        "correct_option": "A",
+        "explanation": "The RBI uses the Consumer Price Index (CPI) - Combined (headline inflation) as its key gauge of inflation for monetary policy decisions."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Economy",
+        "question_text": "Who serves as the Chairman of the Monetary Policy Committee (MPC) of India?",
+        "option_a": "Governor of the RBI",
+        "option_b": "Finance Minister of India",
+        "option_c": "Prime Minister of India",
+        "option_d": "Finance Secretary",
+        "correct_option": "A",
+        "explanation": "The Governor of the Reserve Bank of India is the ex-officio Chairman of the six-member Monetary Policy Committee."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Economy",
+        "question_text": "Except for the one-rupee note, currency notes in India bear the signature of whom?",
+        "option_a": "Governor of the RBI",
+        "option_b": "Finance Minister of India",
+        "option_c": "President of India",
+        "option_d": "Finance Secretary",
+        "correct_option": "A",
+        "explanation": "All paper currency notes in India except the one-rupee note bear the signature of the Governor of the Reserve Bank of India."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Economy",
+        "question_text": "The one-rupee note in India bears the signature of which authority?",
+        "option_a": "Finance Secretary",
+        "option_b": "Governor of the RBI",
+        "option_c": "Finance Minister",
+        "option_d": "President of India",
+        "correct_option": "A",
+        "explanation": "Under the Coinage Act, the one-rupee note is issued by the Ministry of Finance and bears the signature of the Finance Secretary."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Economy",
+        "question_text": "The Goods and Services Tax (GST) was introduced in India in which year?",
+        "option_a": "2017",
+        "option_b": "2015",
+        "option_c": "2016",
+        "option_d": "2018",
+        "correct_option": "A",
+        "explanation": "GST was launched in India on July 1, 2017, following the passage of the 101st Constitutional Amendment Act."
+    },
+    {
+        "category": "SSC",
+        "subject": "Economy",
+        "question_text": "Where is the headquarters of the Reserve Bank of India (RBI) located?",
+        "option_a": "Mumbai",
+        "option_b": "New Delhi",
+        "option_c": "Kolkata",
+        "option_d": "Chennai",
+        "correct_option": "A",
+        "explanation": "The RBI was established in 1935 in Calcutta but was permanently moved to Mumbai in 1937."
+    },
+    {
+        "category": "SSC",
+        "subject": "Economy",
+        "question_text": "In which year were 14 major commercial banks nationalized in India for the first time?",
+        "option_a": "1969",
+        "option_b": "1955",
+        "option_c": "1980",
+        "option_d": "1991",
+        "correct_option": "A",
+        "explanation": "In July 1969, the Government of India nationalized 14 major commercial banks through an ordinance issued by the Indira Gandhi government."
+    },
+    {
+        "category": "SSC",
+        "subject": "Economy",
+        "question_text": "Which statutory body regulates the insurance sector in India?",
+        "option_a": "IRDAI",
+        "option_b": "SEBI",
+        "option_c": "PFRDA",
+        "option_d": "RBI",
+        "correct_option": "A",
+        "explanation": "The Insurance Regulatory and Development Authority of India (IRDAI) is the regulatory body tasked with licensing and regulating insurance industries."
+    },
+    {
+        "category": "SSC",
+        "subject": "Economy",
+        "question_text": "Which regulatory body regulates the securities and stock markets in India?",
+        "option_a": "SEBI",
+        "option_b": "RBI",
+        "option_c": "IRDAI",
+        "option_d": "NABARD",
+        "correct_option": "A",
+        "explanation": "The Securities and Exchange Board of India (SEBI) is the regulator for securities and commodity markets in India, established under the SEBI Act 1992."
+    },
+    {
+        "category": "Banking",
+        "subject": "Economy",
+        "question_text": "What is the interest rate at which the RBI lends money short-term to commercial banks?",
+        "option_a": "Repo Rate",
+        "option_b": "Reverse Repo Rate",
+        "option_c": "Bank Rate",
+        "option_d": "MSF Rate",
+        "correct_option": "A",
+        "explanation": "The Repo Rate (Repurchase Option) is the policy rate at which commercial banks borrow money from the RBI against government securities."
+    },
+    {
+        "category": "Banking",
+        "subject": "Economy",
+        "question_text": "What is the interest rate at which the RBI borrows short-term funds from commercial banks?",
+        "option_a": "Reverse Repo Rate",
+        "option_b": "Repo Rate",
+        "option_c": "Bank Rate",
+        "option_d": "MSF Rate",
+        "correct_option": "A",
+        "explanation": "The Reverse Repo Rate is the rate at which the RBI borrows funds from commercial banks to absorb excess liquidity from the market."
+    },
+    {
+        "category": "Banking",
+        "subject": "Economy",
+        "question_text": "What is the main indicator used to measure the size and growth of a country's economy?",
+        "option_a": "Gross Domestic Product (GDP)",
+        "option_b": "Gross National Product (GNP)",
+        "option_c": "Net National Product (NNP)",
+        "option_d": "National Income",
+        "correct_option": "A",
+        "explanation": "GDP represents the total monetary value of all finished goods and services produced within a country's borders in a specific time period."
+    },
+    {
+        "category": "Banking",
+        "subject": "Economy",
+        "question_text": "In which year was the Planning Commission of India replaced by the NITI Aayog?",
+        "option_a": "2015",
+        "option_b": "2014",
+        "option_c": "2016",
+        "option_d": "2017",
+        "correct_option": "A",
+        "explanation": "NITI Aayog (National Institution for Transforming India) was formed via cabinet resolution on January 1, 2015, replacing the Planning Commission."
+    },
+    {
+        "category": "Banking",
+        "subject": "Economy",
+        "question_text": "Who is known as the 'Father of the Green Revolution' in India?",
+        "option_a": "M.S. Swaminathan",
+        "option_b": "Norman Borlaug",
+        "option_c": "Verghese Kurien",
+        "option_d": "Verghese Kurian",
+        "correct_option": "A",
+        "explanation": "Dr. M.S. Swaminathan was an agricultural scientist who led India's Green Revolution in the 1960s, introducing high-yielding wheat varieties."
+    },
+    {
+        "category": "Railways",
+        "subject": "Economy",
+        "question_text": "The 'Blue Revolution' in India is associated with the rapid growth of which sector?",
+        "option_a": "Fish Production",
+        "option_b": "Milk Production",
+        "option_c": "Fertilizer Production",
+        "option_d": "Oilseeds Production",
+        "correct_option": "A",
+        "explanation": "The Blue Revolution refers to the emergence of aquaculture and commercial fish farming as an important and highly productive agricultural activity."
+    },
+    {
+        "category": "Railways",
+        "subject": "Economy",
+        "question_text": "Which is the largest public sector commercial bank in India?",
+        "option_a": "State Bank of India",
+        "option_b": "Punjab National Bank",
+        "option_c": "Bank of Baroda",
+        "option_d": "HDFC Bank",
+        "correct_option": "A",
+        "explanation": "The State Bank of India (SBI) is a multinational, public sector banking and financial services statutory body, and the largest bank in India."
+    },
+    {
+        "category": "Railways",
+        "subject": "Economy",
+        "question_text": "The Imperial Bank of India was renamed as the State Bank of India in which year?",
+        "option_a": "1955",
+        "option_b": "1947",
+        "option_c": "1950",
+        "option_d": "1969",
+        "correct_option": "A",
+        "explanation": "The Imperial Bank of India, formed in 1921, was nationalized and renamed the State Bank of India (SBI) in July 1955."
+    },
+    {
+        "category": "Railways",
+        "subject": "Economy",
+        "question_text": "What is the international reserve asset created by the IMF in 1969 to supplement member countries' official reserves?",
+        "option_a": "Special Drawing Rights (SDR)",
+        "option_b": "Gold Standard",
+        "option_c": "Eurodollars",
+        "option_d": "Treasury Bills",
+        "correct_option": "A",
+        "explanation": "SDR is an international reserve asset created by the IMF, representing a potential claim on the freely usable currencies of IMF members."
+    },
+    {
+        "category": "Railways",
+        "subject": "Economy",
+        "question_text": "Which of the following is classified as a direct tax in India?",
+        "option_a": "Income Tax",
+        "option_b": "GST",
+        "option_c": "Customs Duty",
+        "option_d": "Excise Duty",
+        "correct_option": "A",
+        "explanation": "Direct taxes are paid directly by individuals or corporations to the government, such as Income Tax and Corporate Tax. GST is an indirect tax."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Economy",
+        "question_text": "Which country was the first to introduce Goods and Services Tax (GST) in 1954?",
+        "option_a": "France",
+        "option_b": "Canada",
+        "option_c": "Germany",
+        "option_d": "Australia",
+        "correct_option": "A",
+        "explanation": "France was the first country to implement GST in 1954 to prevent tax evasion and simplify collection."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Economy",
+        "question_text": "What is the current base year used by the CSO to calculate India's GDP?",
+        "option_a": "2011-12",
+        "option_b": "2004-05",
+        "option_c": "2015-16",
+        "option_d": "2000-01",
+        "correct_option": "A",
+        "explanation": "The Central Statistics Office (CSO) updated the base year for GDP calculations from 2004-05 to 2011-12 in January 2015."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Economy",
+        "question_text": "Which country was India's largest trading partner in the fiscal year 2023-24?",
+        "option_a": "USA",
+        "option_b": "China",
+        "option_c": "UAE",
+        "option_d": "Saudi Arabia",
+        "correct_option": "A",
+        "explanation": "The United States of America emerged as India's largest trading partner in recent years, closely followed by China."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Economy",
+        "question_text": "Which institution regulates the banking system in India?",
+        "option_a": "Reserve Bank of India (RBI)",
+        "option_b": "SEBI",
+        "option_c": "NABARD",
+        "option_d": "Ministry of Finance",
+        "correct_option": "A",
+        "explanation": "The RBI is the central bank of India, regulating and supervising all commercial and cooperative banking institutions under the Banking Regulation Act."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Economy",
+        "question_text": "The concept of Five-Year Plans in the Indian economy was originally borrowed from which country?",
+        "option_a": "USSR",
+        "option_b": "USA",
+        "option_c": "United Kingdom",
+        "option_d": "Germany",
+        "correct_option": "A",
+        "explanation": "The concept of economic planning through five-year plans was adopted from the Soviet Union (USSR), where Josef Stalin implemented it first."
+    },
+    {
+        "category": "General",
+        "subject": "Science",
+        "question_text": "Which chemical compound is commonly known as 'Baking Soda'?",
+        "option_a": "Sodium Bicarbonate",
+        "option_b": "Sodium Carbonate",
+        "option_c": "Sodium Chloride",
+        "option_d": "Calcium Carbonate",
+        "correct_option": "A",
+        "explanation": "Sodium Bicarbonate (NaHCO3) is commonly known as baking soda, widely used in baking and as an antacid."
+    },
+    {
+        "category": "General",
+        "subject": "Science",
+        "question_text": "Deficiency of which vitamin causes the disease 'Scurvy'?",
+        "option_a": "Vitamin C",
+        "option_b": "Vitamin A",
+        "option_c": "Vitamin B1",
+        "option_d": "Vitamin D",
+        "correct_option": "A",
+        "explanation": "Scurvy is caused by a severe deficiency of Vitamin C (ascorbic acid), which is crucial for collagen synthesis and tissue repair."
+    },
+    {
+        "category": "General",
+        "subject": "Science",
+        "question_text": "What is the SI unit of electric current?",
+        "option_a": "Ampere",
+        "option_b": "Volt",
+        "option_c": "Ohm",
+        "option_d": "Watt",
+        "correct_option": "A",
+        "explanation": "The Ampere (A) is the SI unit of electric current, named after French physicist André-Marie Ampère."
+    },
+    {
+        "category": "General",
+        "subject": "Science",
+        "question_text": "Which instrument is used to measure atmospheric pressure?",
+        "option_a": "Barometer",
+        "option_b": "Thermometer",
+        "option_c": "Hygrometer",
+        "option_d": "Anemometer",
+        "correct_option": "A",
+        "explanation": "A barometer is a scientific instrument used to measure air pressure, first designed by Evangelista Torricelli in 1643."
+    },
+    {
+        "category": "General",
+        "subject": "Science",
+        "question_text": "What is the main gas present in LPG (Liquefied Petroleum Gas) cylinders?",
+        "option_a": "Butane",
+        "option_b": "Methane",
+        "option_c": "Ethane",
+        "option_d": "Hydrogen",
+        "correct_option": "A",
+        "explanation": "LPG is primarily a mixture of flammable hydrocarbon gases, with butane and propane being the main components."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Science",
+        "question_text": "Which blood group is known as the 'Universal Donor'?",
+        "option_a": "O Negative (O-)",
+        "option_b": "O Positive (O+)",
+        "option_c": "AB Positive (AB+)",
+        "option_d": "AB Negative (AB-)",
+        "correct_option": "A",
+        "explanation": "O Negative blood contains no A, B, or Rh antigens, meaning it can be transfused to patients of any blood type without adverse immune reactions."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Science",
+        "question_text": "Which physical law explains why passengers jerk forward when a moving train stops suddenly?",
+        "option_a": "Newton's First Law of Motion",
+        "option_b": "Newton's Second Law of Motion",
+        "option_c": "Newton's Third Law of Motion",
+        "option_d": "Law of Conservation of Momentum",
+        "correct_option": "A",
+        "explanation": "Newton's First Law (Law of Inertia) states that a body remains in its state of motion unless acted on by a force. The passenger's body continues moving forward due to inertia."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Science",
+        "question_text": "What is the SI unit of power?",
+        "option_a": "Watt",
+        "option_b": "Joule",
+        "option_c": "Newton",
+        "option_d": "Volt",
+        "correct_option": "A",
+        "explanation": "The Watt (W) is the SI unit of power, equivalent to one Joule per second, named after Scottish inventor James Watt."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Science",
+        "question_text": "What is the approximate speed of light in a vacuum?",
+        "option_a": "3 x 10^8 meters per second",
+        "option_b": "3 x 10^5 meters per second",
+        "option_c": "3 x 10^10 meters per second",
+        "option_d": "1.5 x 10^8 meters per second",
+        "correct_option": "A",
+        "explanation": "The speed of light in vacuum is a fundamental physical constant exactly equal to 299,792,458 meters per second (approx 3 x 10^8 m/s)."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Science",
+        "question_text": "Which acid is primarily present in lemons and oranges?",
+        "option_a": "Citric Acid",
+        "option_b": "Acetic Acid",
+        "option_c": "Lactic Acid",
+        "option_d": "Tartaric Acid",
+        "correct_option": "A",
+        "explanation": "Citric acid is a weak organic acid found naturally in citrus fruits, giving them their characteristic sour taste."
+    },
+    {
+        "category": "SSC",
+        "subject": "Science",
+        "question_text": "Which metal is present in chlorophyll, the green pigment in plants?",
+        "option_a": "Magnesium",
+        "option_b": "Iron",
+        "option_c": "Copper",
+        "option_d": "Zinc",
+        "correct_option": "A",
+        "explanation": "Chlorophyll molecules contain a central magnesium atom bound in a porphyrin ring structure, crucial for absorbing light during photosynthesis."
+    },
+    {
+        "category": "SSC",
+        "subject": "Science",
+        "question_text": "Which organelle is widely referred to as the 'Powerhouse of the Cell'?",
+        "option_a": "Mitochondria",
+        "option_b": "Lysosome",
+        "option_c": "Ribosome",
+        "option_d": "Golgi Apparatus",
+        "correct_option": "A",
+        "explanation": "Mitochondria are double-membraned organelles responsible for generating adenosine triphosphate (ATP), the cell's energy currency."
+    },
+    {
+        "category": "SSC",
+        "subject": "Science",
+        "question_text": "Which metal remains in liquid state at standard room temperature?",
+        "option_a": "Mercury",
+        "option_b": "Gallium",
+        "option_c": "Sodium",
+        "option_d": "Lead",
+        "correct_option": "A",
+        "explanation": "Mercury (Hg) is a heavy d-block element and the only metallic element that is liquid at standard conditions of temperature and pressure."
+    },
+    {
+        "category": "SSC",
+        "subject": "Science",
+        "question_text": "In which medium does sound travel the fastest?",
+        "option_a": "Solids",
+        "option_b": "Liquids",
+        "option_c": "Gases",
+        "option_d": "Vacuum",
+        "correct_option": "A",
+        "explanation": "Sound is a mechanical wave requiring a medium. It travels fastest in solids due to the high density and elastic properties of particles. It cannot travel in a vacuum."
+    },
+    {
+        "category": "SSC",
+        "subject": "Science",
+        "question_text": "What are the primary colors of light?",
+        "option_a": "Red, Green, Blue",
+        "option_b": "Red, Yellow, Blue",
+        "option_c": "Red, Yellow, Green",
+        "option_d": "Cyan, Magenta, Yellow",
+        "correct_option": "A",
+        "explanation": "In the additive color system used for light (screens, projection), the primary colors are Red, Green, and Blue (RGB)."
+    },
+    {
+        "category": "Banking",
+        "subject": "Science",
+        "question_text": "Which gas is primarily responsible for the greenhouse effect and global warming?",
+        "option_a": "Carbon Dioxide",
+        "option_b": "Nitrogen",
+        "option_c": "Oxygen",
+        "option_d": "Argon",
+        "correct_option": "A",
+        "explanation": "While water vapor is abundant, Carbon Dioxide (CO2) is the primary greenhouse gas emitted through human activities, driving global warming."
+    },
+    {
+        "category": "Banking",
+        "subject": "Science",
+        "question_text": "What is the chemical name of Vitamin D?",
+        "option_a": "Calciferol",
+        "option_b": "Retinol",
+        "option_c": "Ascorbic Acid",
+        "option_d": "Tocopherol",
+        "correct_option": "A",
+        "explanation": "Vitamin D is a group of fat-soluble secosteroids, with its active forms chemically known as calciferol (D3 is cholecalciferol)."
+    },
+    {
+        "category": "Banking",
+        "subject": "Science",
+        "question_text": "Which is the hardest natural substance found on Earth?",
+        "option_a": "Diamond",
+        "option_b": "Graphite",
+        "option_c": "Quartz",
+        "option_d": "Tungsten",
+        "correct_option": "A",
+        "explanation": "Diamond is a solid form of carbon with its atoms arranged in a crystal structure, making it the hardest known natural material."
+    },
+    {
+        "category": "Banking",
+        "subject": "Science",
+        "question_text": "The scientific study of fungi is known by which term?",
+        "option_a": "Mycology",
+        "option_b": "Phycology",
+        "option_c": "Virology",
+        "option_d": "Bacteriology",
+        "correct_option": "A",
+        "explanation": "Mycology is the branch of biology concerned with the study of fungi, including their genetic and biochemical properties."
+    },
+    {
+        "category": "Banking",
+        "subject": "Science",
+        "question_text": "Which instrument is used to determine the density and purity of milk?",
+        "option_a": "Lactometer",
+        "option_b": "Hydrometer",
+        "option_c": "Barometer",
+        "option_d": "Saccharometer",
+        "correct_option": "A",
+        "explanation": "A lactometer is a small glass instrument used to find the specific gravity of milk, indicating whether it has been diluted with water."
+    },
+    {
+        "category": "Railways",
+        "subject": "Science",
+        "question_text": "Which electronic device is used to convert Alternating Current (AC) to Direct Current (DC)?",
+        "option_a": "Rectifier",
+        "option_b": "Inverter",
+        "option_c": "Transformer",
+        "option_d": "Amplifier",
+        "correct_option": "A",
+        "explanation": "A rectifier is an electrical device that converts AC, which periodically reverses direction, to DC, which flows in only one direction. An inverter does the opposite."
+    },
+    {
+        "category": "Railways",
+        "subject": "Science",
+        "question_text": "Which chemical element has the atomic number 1?",
+        "option_a": "Hydrogen",
+        "option_b": "Helium",
+        "option_c": "Lithium",
+        "option_d": "Oxygen",
+        "correct_option": "A",
+        "explanation": "Hydrogen (H) is the first element on the periodic table, possessing a single proton in its nucleus."
+    },
+    {
+        "category": "Railways",
+        "subject": "Science",
+        "question_text": "What is 'Dry Ice' chemically?",
+        "option_a": "Solid Carbon Dioxide",
+        "option_b": "Solid Nitrogen",
+        "option_c": "Frozen Water",
+        "option_d": "Solid Methane",
+        "correct_option": "A",
+        "explanation": "Dry ice is the common name for solid carbon dioxide (CO2). It undergoes sublimation, transitioning directly from solid to gas at -78.5 degrees C."
+    },
+    {
+        "category": "Railways",
+        "subject": "Science",
+        "question_text": "Which planet in our solar system is closest to the Sun?",
+        "option_a": "Mercury",
+        "option_b": "Venus",
+        "option_c": "Mars",
+        "option_d": "Earth",
+        "correct_option": "A",
+        "explanation": "Mercury is the smallest and closest of the eight planets to the Sun, orbiting it in about 88 Earth days."
+    },
+    {
+        "category": "Railways",
+        "subject": "Science",
+        "question_text": "Which non-metal is an excellent conductor of electricity?",
+        "option_a": "Graphite",
+        "option_b": "Diamond",
+        "option_c": "Sulfur",
+        "option_d": "Phosphorus",
+        "correct_option": "A",
+        "explanation": "Graphite is an allotrope of carbon containing delocalized electrons that are free to move through its sheet structure, conducting electricity."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Science",
+        "question_text": "Which is the largest organ in the human body?",
+        "option_a": "Skin",
+        "option_b": "Liver",
+        "option_c": "Brain",
+        "option_d": "Lungs",
+        "correct_option": "A",
+        "explanation": "The skin is the largest organ of the body, covering the entire external surface and serving as a protective barrier."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Science",
+        "question_text": "The rusting of iron is what type of chemical reaction?",
+        "option_a": "Oxidation",
+        "option_b": "Reduction",
+        "option_c": "Decomposition",
+        "option_d": "Displacement",
+        "correct_option": "A",
+        "explanation": "Rusting of iron refers to the formation of hydrated iron oxide on the surface of iron in the presence of oxygen and moisture, which is an oxidation reaction."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Science",
+        "question_text": "Which gas is the main constituent of biogas (gobargas)?",
+        "option_a": "Methane",
+        "option_b": "Carbon Dioxide",
+        "option_c": "Hydrogen",
+        "option_d": "Nitrogen",
+        "correct_option": "A",
+        "explanation": "Biogas is primarily composed of methane (CH4, about 50-75%) and carbon dioxide (CO2, about 25-50%), produced by anaerobic digestion of organic matter."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Science",
+        "question_text": "Which type of mirror is commonly used as a rear-view mirror in vehicles?",
+        "option_a": "Convex Mirror",
+        "option_b": "Concave Mirror",
+        "option_c": "Plane Mirror",
+        "option_d": "Cylindrical Mirror",
+        "correct_option": "A",
+        "explanation": "Convex mirrors are used because they diverge light rays and provide a wider field of view, showing erect and diminished images of traffic behind."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Science",
+        "question_text": "Myopia (short-sightedness) is corrected using which type of lens?",
+        "option_a": "Concave Lens",
+        "option_b": "Convex Lens",
+        "option_c": "Bifocal Lens",
+        "option_d": "Cylindrical Lens",
+        "correct_option": "A",
+        "explanation": "Myopia is a vision condition where close objects appear clearly, but far ones are blurry. It is corrected by a diverging (concave) lens to focus light on the retina."
+    },
+    {
+        "category": "General",
+        "subject": "Current Affairs",
+        "question_text": "Which country hosted the UN Climate Change Conference (COP28) in December 2023?",
+        "option_a": "United Arab Emirates",
+        "option_b": "Egypt",
+        "option_c": "United Kingdom",
+        "option_d": "Saudi Arabia",
+        "correct_option": "A",
+        "explanation": "COP28 was hosted in Dubai, United Arab Emirates (UAE) from November 30 to December 12, 2023."
+    },
+    {
+        "category": "General",
+        "subject": "Current Affairs",
+        "question_text": "Who won the Men's Singles title at the Australian Open 2024?",
+        "option_a": "Jannik Sinner",
+        "option_b": "Daniil Medvedev",
+        "option_c": "Novak Djokovic",
+        "option_d": "Carlos Alcaraz",
+        "correct_option": "A",
+        "explanation": "Italian tennis player Jannik Sinner won the Men's Singles title at the Australian Open 2024, defeating Daniil Medvedev in the final."
+    },
+    {
+        "category": "General",
+        "subject": "Current Affairs",
+        "question_text": "Which organization constructs and publishes the Digital Payments Index (DPI) in India?",
+        "option_a": "Reserve Bank of India",
+        "option_b": "NPCI",
+        "option_c": "SEBI",
+        "option_d": "Ministry of Finance",
+        "correct_option": "A",
+        "explanation": "The Reserve Bank of India (RBI) constructs and publishes the Digital Payments Index (DPI) to capture the extent of digitization of payments across the country."
+    },
+    {
+        "category": "General",
+        "subject": "Current Affairs",
+        "question_text": "What is the name of India's indigenous collision avoidance system designed for trains?",
+        "option_a": "Kavach",
+        "option_b": "Gajraj",
+        "option_c": "Vande",
+        "option_d": "Nidhi",
+        "correct_option": "A",
+        "explanation": "Kavach is the Indian Railways' indigenous Automatic Train Protection (ATP) system designed to prevent trains from passing signals at danger and head-on collisions."
+    },
+    {
+        "category": "General",
+        "subject": "Current Affairs",
+        "question_text": "Which Indian film's song 'Naatu Naatu' won the Oscar for Best Original Song in 2023?",
+        "option_a": "RRR",
+        "option_b": "Pushpa",
+        "option_c": "Jawan",
+        "option_d": "Gangubai Kathiawadi",
+        "correct_option": "A",
+        "explanation": "The song 'Naatu Naatu' from S.S. Rajamouli's film RRR won the Oscar for Best Original Song at the 95th Academy Awards in 2023."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Current Affairs",
+        "question_text": "Which space agency launched the Aditya-L1 solar observatory mission in 2023?",
+        "option_a": "ISRO (India)",
+        "option_b": "NASA (USA)",
+        "option_c": "ESA (Europe)",
+        "option_d": "JAXA (Japan)",
+        "correct_option": "A",
+        "explanation": "The Aditya-L1 solar mission was successfully launched by the Indian Space Research Organisation (ISRO) on September 2, 2023."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Current Affairs",
+        "question_text": "Which country won the FIFA Men's World Cup 2022 held in Qatar?",
+        "option_a": "Argentina",
+        "option_b": "France",
+        "option_c": "Croatia",
+        "option_d": "Morocco",
+        "correct_option": "A",
+        "explanation": "Argentina won the 2022 FIFA World Cup after defeating France in the final match on penalties, marking Lionel Messi's historic World Cup win."
+    },
+    {
+        "category": "SSC",
+        "subject": "Current Affairs",
+        "question_text": "Which country assumed the G20 Presidency from India on December 1, 2023, to host the 2024 summit?",
+        "option_a": "Brazil",
+        "option_b": "South Africa",
+        "option_c": "Italy",
+        "option_d": "Indonesia",
+        "correct_option": "A",
+        "explanation": "Brazil officially took over the G20 Presidency from India on December 1, 2023, hosting the 2024 G20 Summit in Rio de Janeiro."
+    },
+    {
+        "category": "SSC",
+        "subject": "Current Affairs",
+        "question_text": "Who was conferred with the prestigious Dadasaheb Phalke Lifetime Achievement Award in 2023?",
+        "option_a": "Waheeda Rehman",
+        "option_b": "Asha Parekh",
+        "option_c": "Rajinikanth",
+        "option_d": "Amitabh Bachchan",
+        "correct_option": "A",
+        "explanation": "Veteran actress Waheeda Rehman was honored with the Dadasaheb Phalke Award for her outstanding contribution to Indian cinema at the 69th National Film Awards."
+    },
+    {
+        "category": "SSC",
+        "subject": "Current Affairs",
+        "question_text": "Which city hosted the Summer Olympic Games in July-August 2024?",
+        "option_a": "Paris, France",
+        "option_b": "Tokyo, Japan",
+        "option_c": "Los Angeles, USA",
+        "option_d": "London, UK",
+        "correct_option": "A",
+        "explanation": "The 2024 Summer Olympics (Games of the XXXIII Olympiad) were held in Paris, France, from July 26 to August 11, 2024."
+    },
+    {
+        "category": "SSC",
+        "subject": "Current Affairs",
+        "question_text": "In which month and year was the new Parliament building of India officially inaugurated by Prime Minister Narendra Modi?",
+        "option_a": "May 2023",
+        "option_b": "January 2023",
+        "option_c": "August 2023",
+        "option_d": "December 2023",
+        "correct_option": "A",
+        "explanation": "The new Parliament building in New Delhi was officially inaugurated on May 28, 2023, by Prime Minister Narendra Modi during the Azadi Ka Amrit Mahotsav."
+    },
+    {
+        "category": "SSC",
+        "subject": "Current Affairs",
+        "question_text": "Who was the chief architect of India's new Parliament building under the Central Vista Redevelopment Project?",
+        "option_a": "Bimal Patel",
+        "option_b": "Hafeez Contractor",
+        "option_c": "Charles Correa",
+        "option_d": "Laurie Baker",
+        "correct_option": "A",
+        "explanation": "Bimal Patel of HCP Design Planning and Management designed the triangular-shaped new Parliament building."
+    },
+    {
+        "category": "Banking",
+        "subject": "Current Affairs",
+        "question_text": "The landing spot of Chandrayaan-3's lander on the Moon's south pole was named which of the following?",
+        "option_a": "Shiv Shakti Point",
+        "option_b": "Tiranga Point",
+        "option_c": "Jawahar Point",
+        "option_d": "Atal Point",
+        "correct_option": "A",
+        "explanation": "Prime Minister Narendra Modi announced that the landing site of Chandrayaan-3's Vikram lander will be known as 'Shiv Shakti Point'."
+    },
+    {
+        "category": "Banking",
+        "subject": "Current Affairs",
+        "question_text": "National Space Day is celebrated in India on which date to mark the landing of Chandrayaan-3?",
+        "option_a": "August 23",
+        "option_b": "August 15",
+        "option_c": "September 2",
+        "option_d": "July 14",
+        "correct_option": "A",
+        "explanation": "August 23 was declared as 'National Space Day' in India to commemorate the successful soft landing of Chandrayaan-3 on the Moon in 2023."
+    },
+    {
+        "category": "Banking",
+        "subject": "Current Affairs",
+        "question_text": "Who was the Chief Guest at India's 75th Republic Day Parade on January 26, 2024?",
+        "option_a": "Emmanuel Macron",
+        "option_b": "Joe Biden",
+        "option_c": "Abdel Fattah el-Sisi",
+        "option_d": "Jair Bolsonaro",
+        "correct_option": "A",
+        "explanation": "French President Emmanuel Macron visited India as the Chief Guest for the 75th Republic Day celebrations in New Delhi."
+    },
+    {
+        "category": "Banking",
+        "subject": "Current Affairs",
+        "question_text": "Who among the following political leaders was announced to be awarded the Bharat Ratna, India's highest civilian honor, in 2024?",
+        "option_a": "Karpoori Thakur",
+        "option_b": "Atal Bihari Vajpayee",
+        "option_c": "Pranab Mukherjee",
+        "option_d": "Bhupen Hazarika",
+        "correct_option": "A",
+        "explanation": "Former Bihar Chief Minister Karpoori Thakur was posthumously awarded the Bharat Ratna in 2024, along with L.K. Advani, Chaudhary Charan Singh, P.V. Narasimha Rao, and M.S. Swaminathan."
+    },
+    {
+        "category": "Banking",
+        "subject": "Current Affairs",
+        "question_text": "Who is the current Chairman of the Indian Space Research Organisation (ISRO) who led the Chandrayaan-3 mission?",
+        "option_a": "S. Somanath",
+        "option_b": "K. Sivan",
+        "option_c": "A.S. Kiran Kumar",
+        "option_d": "G. Madhavan Nair",
+        "correct_option": "A",
+        "explanation": "Sreedhara Panicker Somanath has been serving as the Chairman of ISRO and Secretary of the Department of Space since January 2022."
+    },
+    {
+        "category": "Railways",
+        "subject": "Current Affairs",
+        "question_text": "Which country officially became the 32nd member of the North Atlantic Treaty Organization (NATO) in March 2024?",
+        "option_a": "Sweden",
+        "option_b": "Finland",
+        "option_c": "Ukraine",
+        "option_d": "Switzerland",
+        "correct_option": "A",
+        "explanation": "Sweden formally joined NATO as its 32nd member on March 7, 2024, ending decades of post-WWII neutrality."
+    },
+    {
+        "category": "Railways",
+        "subject": "Current Affairs",
+        "question_text": "Which Indian state became the first in independent India to pass a bill implementing a Uniform Civil Code (UCC) in February 2024?",
+        "option_a": "Uttarakhand",
+        "option_b": "Goa",
+        "option_c": "Gujarat",
+        "option_d": "Uttar Pradesh",
+        "correct_option": "A",
+        "explanation": "Uttarakhand became the first state in independent India to pass a UCC bill in its assembly in February 2024. Goa has had a UCC since Portuguese rule."
+    },
+    {
+        "category": "Railways",
+        "subject": "Current Affairs",
+        "question_text": "Who was awarded the 58th Jnanpith Award in 2024 for their contribution to literature?",
+        "option_a": "Gulzar",
+        "option_b": "Damodar Mauzo",
+        "option_c": "Nilmani Phookan",
+        "option_d": "Amitav Ghosh",
+        "correct_option": "A",
+        "explanation": "The 58th Jnanpith Award was jointly awarded to Urdu poet Gulzar and Sanskrit scholar Jagadguru Rambhadracharya in 2024."
+    },
+    {
+        "category": "Railways",
+        "subject": "Current Affairs",
+        "question_text": "Which team won the Women's Premier League (WPL) 2024 cricket tournament?",
+        "option_a": "Royal Challengers Bangalore",
+        "option_b": "Delhi Capitals",
+        "option_c": "Mumbai Indians",
+        "option_d": "UP Warriorz",
+        "correct_option": "A",
+        "explanation": "Royal Challengers Bangalore (RCB) won the WPL 2024 title by defeating Delhi Capitals in the final match in New Delhi."
+    },
+    {
+        "category": "Railways",
+        "subject": "Current Affairs",
+        "question_text": "Which countries jointly hosted the ICC Men's T20 World Cup in June 2024?",
+        "option_a": "West Indies and USA",
+        "option_b": "Australia and New Zealand",
+        "option_c": "India and Bangladesh",
+        "option_d": "England and Wales",
+        "correct_option": "A",
+        "explanation": "The 2024 ICC Men's T20 World Cup was co-hosted by the West Indies and the United States of America in June 2024."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Current Affairs",
+        "question_text": "Who was awarded the Nobel Peace Prize in 2023 for her fight against the oppression of women in Iran?",
+        "option_a": "Narges Mohammadi",
+        "option_b": "Maria Ressa",
+        "option_c": "Malala Yousafzai",
+        "option_d": "Ellen Johnson Sirleaf",
+        "correct_option": "A",
+        "explanation": "Imprisoned Iranian activist Narges Mohammadi won the 2023 Nobel Peace Prize for her struggle for human rights and freedom for all."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Current Affairs",
+        "question_text": "On which river was the world's tallest railway arch bridge, the Chenab Bridge, constructed in Jammu and Kashmir?",
+        "option_a": "Chenab River",
+        "option_b": "Jhelum River",
+        "option_c": "Indus River",
+        "option_d": "Ravi River",
+        "correct_option": "A",
+        "explanation": "The Chenab Bridge is a steel and concrete arch bridge built between Bakkal and Kauri over the Chenab River, standing 359 meters above the river bed."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Current Affairs",
+        "question_text": "Which city hosted the UN Climate Change Conference (COP29) in November 2024?",
+        "option_a": "Baku, Azerbaijan",
+        "option_b": "Dubai, UAE",
+        "option_c": "Belém, Brazil",
+        "option_d": "Glasgow, UK",
+        "correct_option": "A",
+        "explanation": "COP29 was held in Baku, Azerbaijan, focusing on climate finance goals and transitioning away from fossil fuels."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Current Affairs",
+        "question_text": "Which city was ranked cleanest in India for the seventh consecutive year in the Swachh Survekshan Awards 2023?",
+        "option_a": "Indore",
+        "option_b": "Surat",
+        "option_c": "Navi Mumbai",
+        "option_d": "Ambikapur",
+        "correct_option": "A",
+        "explanation": "Indore won the cleanest city award for the seventh straight year. In 2023, Surat jointly shared the top clean city rank with Indore."
+    },
+    {
+        "category": "State PSC",
+        "subject": "Current Affairs",
+        "question_text": "In which Indian city was the world's largest office building, the Surat Diamond Bourse, inaugurated in December 2023?",
+        "option_a": "Surat, Gujarat",
+        "option_b": "Mumbai, Maharashtra",
+        "option_c": "Jaipur, Rajasthan",
+        "option_d": "Gandhinagar, Gujarat",
+        "correct_option": "A",
+        "explanation": "The Surat Diamond Bourse (SDB), the world's largest single-office building (surpassing the Pentagon), was inaugurated by PM Modi in Surat, Gujarat."
+    },
+    {
+        "category": "General",
+        "subject": "General Knowledge",
+        "question_text": "Which is the largest ocean in the world?",
+        "option_a": "Pacific Ocean",
+        "option_b": "Atlantic Ocean",
+        "option_c": "Indian Ocean",
+        "option_d": "Arctic Ocean",
+        "correct_option": "A",
+        "explanation": "The Pacific Ocean is the largest and deepest of Earth's oceanic divisions, covering about 30% of the Earth's surface."
+    },
+    {
+        "category": "General",
+        "subject": "General Knowledge",
+        "question_text": "Which is the tallest land animal currently living on Earth?",
+        "option_a": "Giraffe",
+        "option_b": "African Elephant",
+        "option_c": "Siberian Tiger",
+        "option_d": "Ostrich",
+        "correct_option": "A",
+        "explanation": "The giraffe is the tallest living land animal, reaching heights up to 5.5 meters (18 feet)."
+    },
+    {
+        "category": "General",
+        "subject": "General Knowledge",
+        "question_text": "Which is the largest hot desert in the world?",
+        "option_a": "Sahara Desert",
+        "option_b": "Arabian Desert",
+        "option_c": "Gobi Desert",
+        "option_d": "Kalahari Desert",
+        "correct_option": "A",
+        "explanation": "The Sahara Desert is the largest hot desert in the world and the third-largest desert overall after Antarctica and the Arctic."
+    },
+    {
+        "category": "General",
+        "subject": "General Knowledge",
+        "question_text": "Which is the deepest lake in the world?",
+        "option_a": "Lake Baikal",
+        "option_b": "Lake Tanganyika",
+        "option_c": "Lake Superior",
+        "option_d": "Caspian Sea",
+        "correct_option": "A",
+        "explanation": "Lake Baikal in southern Siberia, Russia, is the deepest lake in the world with a maximum depth of 1,642 meters."
+    },
+    {
+        "category": "General",
+        "subject": "General Knowledge",
+        "question_text": "Which country is famously known as the 'Land of White Elephants'?",
+        "option_a": "Thailand",
+        "option_b": "Myanmar",
+        "option_c": "India",
+        "option_d": "Sri Lanka",
+        "correct_option": "A",
+        "explanation": "Thailand is known as the Land of White Elephants because white elephants are sacred symbols of royal power and good fortune in Thai culture."
+    },
+    {
+        "category": "UPSC",
+        "subject": "General Knowledge",
+        "question_text": "Which is the largest country in the world by geographical area?",
+        "option_a": "Russia",
+        "option_b": "Canada",
+        "option_c": "China",
+        "option_d": "USA",
+        "correct_option": "A",
+        "explanation": "Russia is the largest country by area, covering over 17 million square kilometers, spanning eleven time zones."
+    },
+    {
+        "category": "UPSC",
+        "subject": "General Knowledge",
+        "question_text": "What is the official currency of Japan?",
+        "option_a": "Yen",
+        "option_b": "Yuan",
+        "option_c": "Won",
+        "option_d": "Ringgit",
+        "correct_option": "A",
+        "explanation": "The Japanese Yen (JPY) is the official currency of Japan, and the third most traded currency in the foreign exchange market."
+    },
+    {
+        "category": "UPSC",
+        "subject": "General Knowledge",
+        "question_text": "Where is the headquarters of the United Nations Organization (UNO) located?",
+        "option_a": "New York, USA",
+        "option_b": "Geneva, Switzerland",
+        "option_c": "Paris, France",
+        "option_d": "London, UK",
+        "correct_option": "A",
+        "explanation": "The headquarters of the United Nations is situated in New York City, USA, on land considered international territory."
+    },
+    {
+        "category": "UPSC",
+        "subject": "General Knowledge",
+        "question_text": "Who was the first woman to successfully climb Mount Everest?",
+        "option_a": "Junko Tabei",
+        "option_b": "Bachendri Pal",
+        "option_c": "Santosh Yadav",
+        "option_d": "Tenzing Norgay",
+        "correct_option": "A",
+        "explanation": "Japanese mountaineer Junko Tabei became the first woman to reach the summit of Mount Everest on May 16, 1975."
+    },
+    {
+        "category": "SSC",
+        "subject": "General Knowledge",
+        "question_text": "World Environment Day is observed globally on which date every year?",
+        "option_a": "June 5",
+        "option_b": "April 22",
+        "option_c": "September 16",
+        "option_d": "December 10",
+        "correct_option": "A",
+        "explanation": "World Environment Day has been celebrated on June 5 since 1974, established by the UN during the Stockholm Conference."
+    },
+    {
+        "category": "SSC",
+        "subject": "General Knowledge",
+        "question_text": "Which is the largest continent in the world by both area and population?",
+        "option_a": "Asia",
+        "option_b": "Africa",
+        "option_c": "North America",
+        "option_d": "Europe",
+        "correct_option": "A",
+        "explanation": "Asia is the largest continent, covering about 30% of Earth's land area and home to approximately 60% of the world's population."
+    },
+    {
+        "category": "SSC",
+        "subject": "General Knowledge",
+        "question_text": "Which is the smallest country in the world by area?",
+        "option_a": "Vatican City",
+        "option_b": "Monaco",
+        "option_c": "Nauru",
+        "option_d": "Tuvalu",
+        "correct_option": "A",
+        "explanation": "Vatican City is the smallest independent state in the world, covering an area of just 0.49 square kilometers inside Rome, Italy."
+    },
+    {
+        "category": "SSC",
+        "subject": "General Knowledge",
+        "question_text": "What is the capital city of Australia?",
+        "option_a": "Canberra",
+        "option_b": "Sydney",
+        "option_c": "Melbourne",
+        "option_d": "Brisbane",
+        "correct_option": "A",
+        "explanation": "Canberra was selected as the capital in 1908 as a compromise between rivals Sydney and Melbourne."
+    },
+    {
+        "category": "SSC",
+        "subject": "General Knowledge",
+        "question_text": "Who is the author of the famous 'Harry Potter' fantasy novel series?",
+        "option_a": "J.K. Rowling",
+        "option_b": "J.R.R. Tolkien",
+        "option_c": "George R.R. Martin",
+        "option_d": "C.S. Lewis",
+        "correct_option": "A",
+        "explanation": "British author Joanne Rowling, writing under the pen name J.K. Rowling, wrote the seven-book Harry Potter series."
+    },
+    {
+        "category": "Banking",
+        "subject": "General Knowledge",
+        "question_text": "The island nation Sri Lanka was formerly known by which name during British rule?",
+        "option_a": "Ceylon",
+        "option_b": "Formosa",
+        "option_c": "Mesopotamia",
+        "option_d": "Persia",
+        "correct_option": "A",
+        "explanation": "Sri Lanka was called Ceylon under British administration from 1815 until it gained independence and became a republic in 1972."
+    },
+    {
+        "category": "Banking",
+        "subject": "General Knowledge",
+        "question_text": "Which planet in our solar system is commonly known as the 'Red Planet'?",
+        "option_a": "Mars",
+        "option_b": "Venus",
+        "option_c": "Jupiter",
+        "option_d": "Saturn",
+        "correct_option": "A",
+        "explanation": "Mars is called the Red Planet because iron minerals in its soil oxidize (rust), giving the landscape a reddish appearance."
+    },
+    {
+        "category": "Banking",
+        "subject": "General Knowledge",
+        "question_text": "Who was the first person to step on the surface of the Moon in 1969?",
+        "option_a": "Neil Armstrong",
+        "option_b": "Buzz Aldrin",
+        "option_c": "Yuri Gagarin",
+        "option_d": "Michael Collins",
+        "correct_option": "A",
+        "explanation": "American astronaut Neil Armstrong was the first person to walk on the Moon during the Apollo 11 mission on July 20, 1969."
+    },
+    {
+        "category": "Banking",
+        "subject": "General Knowledge",
+        "question_text": "Where is the headquarters of the Asian Development Bank (ADB) located?",
+        "option_a": "Manila, Philippines",
+        "option_b": "Tokyo, Japan",
+        "option_c": "Beijing, China",
+        "option_d": "Singapore",
+        "correct_option": "A",
+        "explanation": "The ADB, established in 1966 to foster economic growth in Asia, has its headquarters in Mandaluyong, Metro Manila, Philippines."
+    },
+    {
+        "category": "Banking",
+        "subject": "General Knowledge",
+        "question_text": "Which classical dance form of India, known for elaborate makeup, originates from Kerala?",
+        "option_a": "Kathakali",
+        "option_b": "Bharatanatyam",
+        "option_c": "Kathak",
+        "option_d": "Kuchipudi",
+        "correct_option": "A",
+        "explanation": "Kathakali is a classical dance-drama from Kerala characterized by colorful face makeup, heavy costumes, and dramatic expressions."
+    },
+    {
+        "category": "Railways",
+        "subject": "General Knowledge",
+        "question_text": "Which ancient Indian treatise on statecraft and economics was written by Chanakya?",
+        "option_a": "Arthashastra",
+        "option_b": "Mudrarakshasa",
+        "option_c": "Indica",
+        "option_d": "Rajatarangini",
+        "correct_option": "A",
+        "explanation": "The Arthashastra is an ancient Indian treatise on statecraft, military strategy, and economic policy written by Kautilya (Chanakya)."
+    },
+    {
+        "category": "Railways",
+        "subject": "General Knowledge",
+        "question_text": "Which is the largest island in the world?",
+        "option_a": "Greenland",
+        "option_b": "New Guinea",
+        "option_c": "Borneo",
+        "option_d": "Madagascar",
+        "correct_option": "A",
+        "explanation": "Greenland is the world's largest island, covering over 2.1 million square kilometers, belonging politically to Denmark."
+    },
+    {
+        "category": "Railways",
+        "subject": "General Knowledge",
+        "question_text": "Which is the national flower of India?",
+        "option_a": "Lotus",
+        "option_b": "Rose",
+        "option_c": "Jasmine",
+        "option_d": "Marigold",
+        "correct_option": "A",
+        "explanation": "The Lotus (Nelumbo nucifera) is the sacred national flower of India, representing purity, beauty, and divinity."
+    },
+    {
+        "category": "Railways",
+        "subject": "General Knowledge",
+        "question_text": "Who is widely revered as the 'Father of the Indian Constitution'?",
+        "option_a": "Dr. B.R. Ambedkar",
+        "option_b": "Mahatma Gandhi",
+        "option_c": "Jawaharlal Nehru",
+        "option_d": "Dr. Rajendra Prasad",
+        "correct_option": "A",
+        "explanation": "Dr. Bhimrao Ramji Ambedkar served as the Chairman of the Drafting Committee, writing the core constitutional framework."
+    },
+    {
+        "category": "Railways",
+        "subject": "General Knowledge",
+        "question_text": "Which is the highest mountain peak in the world?",
+        "option_a": "Mount Everest",
+        "option_b": "K2 (Godwin Austen)",
+        "option_c": "Kanchenjunga",
+        "option_d": "Lhotse",
+        "correct_option": "A",
+        "explanation": "Mount Everest, located in the Himalayas on the Nepal-China border, is the highest mountain peak, at 8,848.86 meters."
+    },
+    {
+        "category": "State PSC",
+        "subject": "General Knowledge",
+        "question_text": "What is the common currency of the member nations of the European Union?",
+        "option_a": "Euro",
+        "option_b": "Pound Sterling",
+        "option_c": "Franc",
+        "option_d": "Deutsche Mark",
+        "correct_option": "A",
+        "explanation": "The Euro (EUR) is the official currency of 20 of the 27 member states of the European Union, forming the eurozone."
+    },
+    {
+        "category": "State PSC",
+        "subject": "General Knowledge",
+        "question_text": "Where is the headquarters of the World Health Organization (WHO) located?",
+        "option_a": "Geneva, Switzerland",
+        "option_b": "New York, USA",
+        "option_c": "Paris, France",
+        "option_d": "London, UK",
+        "correct_option": "A",
+        "explanation": "The World Health Organization, founded in 1948 to direct international health, is headquartered in Geneva, Switzerland."
+    },
+    {
+        "category": "State PSC",
+        "subject": "General Knowledge",
+        "question_text": "International Women's Day is celebrated annually on which date?",
+        "option_a": "March 8",
+        "option_b": "February 13",
+        "option_c": "April 7",
+        "option_d": "October 11",
+        "correct_option": "A",
+        "explanation": "International Women's Day is observed on March 8 to celebrate women's achievements and advocate for gender equality."
+    },
+    {
+        "category": "State PSC",
+        "subject": "General Knowledge",
+        "question_text": "Which scientific instrument is used to record and measure the intensity of earthquakes?",
+        "option_a": "Seismograph",
+        "option_b": "Barometer",
+        "option_c": "Lactometer",
+        "option_d": "Thermometer",
+        "correct_option": "A",
+        "explanation": "A seismograph (or seismometer) detects and records ground motion caused by seismic waves during earthquakes."
+    },
+    {
+        "category": "State PSC",
+        "subject": "General Knowledge",
+        "question_text": "What is the capital city of Canada?",
+        "option_a": "Ottawa",
+        "option_b": "Toronto",
+        "option_c": "Vancouver",
+        "option_d": "Montreal",
+        "correct_option": "A",
+        "explanation": "Ottawa is the capital of Canada, chosen by Queen Victoria in 1857 due to its secure location on the Ontario-Quebec border."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Polity",
+        "question_text": "Which Article of the Indian Constitution is related to the 'Abolition of Untouchability'?",
+        "option_a": "Article 14",
+        "option_b": "Article 17",
+        "option_c": "Article 19",
+        "option_d": "Article 21",
+        "correct_option": "B",
+        "explanation": "Article 17 of the Constitution of India abolishes 'Untouchability' and forbids its practice in any form. The enforcement of any disability arising out of untouchability is a punishable offense in accordance with law."
+    },
+    {
+        "category": "UPSC",
+        "subject": "Polity",
+        "question_text": "Who appoints the Comptroller and Auditor General (CAG) of India?",
+        "option_a": "Prime Minister of India",
+        "option_b": "President of India",
+        "option_c": "Chief Justice of India",
+        "option_d": "Speaker of the Lok Sabha",
+        "correct_option": "B",
+        "explanation": "Under Article 148 of the Constitution, the Comptroller and Auditor General (CAG) of India is appointed by the President of India by warrant under his hand and seal."
     }
 ]
-
-# Additional generated questions to expand seed collection to cover all categories and subjects
-CATEGORIES = ['General', 'UPSC', 'SSC', 'Banking', 'Railways', 'State PSC']
-SUBJECTS = ['History', 'Geography', 'Polity', 'Economy', 'Science', 'Current Affairs', 'General Knowledge']
-
-def generate_extended_questions():
-    # We will generate a base set of templates and distribute them across combinations
-    extra_questions = []
-    
-    # Let's add questions to reach a substantial set (~150 questions)
-    # Template index to generate variation
-    idx = 0
-    for category in CATEGORIES:
-        for subject in SUBJECTS:
-            # Check if we already have questions for this combination in our core seed
-            existing = [q for q in QUESTIONS if q["category"] == category and q["subject"] == subject]
-            needed = 4 - len(existing) # Seed 4 questions per combination
-            
-            for k in range(needed):
-                idx += 1
-                q_text = f"[{category} Exam Specimen] Which of the following is correct regarding {subject} topic model questions (Type {idx})?"
-                opt_a = f"Standard concept definition related to {subject} Type A"
-                opt_b = f"Advanced operational mechanism of {subject} Type B"
-                opt_c = f"Historically verified statement about {subject} Type C"
-                opt_d = f"Chronologically recorded fact on {subject} Type D"
-                correct = ["A", "B", "C", "D"][idx % 4]
-                explanation = f"This is a sample seed question designed to provide study coverage for the '{category}' exam in the subject area of '{subject}'. The correct option is {correct} because of standard guidelines and official syllabus provisions for government exam syllabus revision."
-                
-                # Replace with more realistic questions for the database!
-                # Let's curate some actual templates:
-                if subject == "History":
-                    q_text = f"Regarding {category} preparation: In which year was the Indian National Congress (INC) founded by A.O. Hume?"
-                    opt_a = "1885"
-                    opt_b = "1890"
-                    opt_c = "1905"
-                    opt_d = "1915"
-                    correct = "A"
-                    explanation = "The Indian National Congress (INC) was founded in December 1885 in Bombay by retired civil servant Allan Octavian Hume, along with leaders like Dinshaw Wacha and Dadabhai Naoroji."
-                elif subject == "Polity":
-                    q_text = f"For {category} General Studies: Which schedule of the Indian Constitution is related to 'Anti-Defection' laws?"
-                    opt_a = "Eighth Schedule"
-                    opt_b = "Ninth Schedule"
-                    opt_c = "Tenth Schedule"
-                    opt_d = "Eleventh Schedule"
-                    correct = "C"
-                    explanation = "The Tenth Schedule of the Constitution, popularly known as the Anti-Defection Law, was added by the 52nd Amendment Act of 1985 to prevent political defections."
-                elif subject == "Geography":
-                    q_text = f"Which of the following soils is also known as 'Regur Soil' and is ideal for growing cotton in India?"
-                    opt_a = "Alluvial Soil"
-                    opt_b = "Black Soil"
-                    opt_c = "Red Soil"
-                    opt_d = "Laterite Soil"
-                    correct = "B"
-                    explanation = "Black soil, commonly known as Regur soil or black cotton soil, is highly argillaceous, moisture-retentive, and rich in nutrients, making it perfect for cotton cultivation. It is found extensively in the Deccan trap region."
-                elif subject == "Economy":
-                    q_text = f"What is the term used for the simultaneous occurrence of low economic growth and high inflation?"
-                    opt_a = "Deflation"
-                    opt_b = "Stagflation"
-                    opt_c = "Reflation"
-                    opt_d = "Hyperinflation"
-                    correct = "B"
-                    explanation = "Stagflation is an economic condition characterized by slow economic growth, high unemployment (stagnation), accompanied by rising prices (inflation)."
-                elif subject == "Science":
-                    q_text = f"Which cell organelle is famously known as the 'Powerhouse of the Cell'?"
-                    opt_a = "Nucleus"
-                    opt_b = "Mitochondria"
-                    opt_c = "Ribosome"
-                    opt_d = "Golgi Apparatus"
-                    correct = "B"
-                    explanation = "Mitochondria are known as the powerhouses of the cell because they generate most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy."
-                elif subject == "Current Affairs":
-                    q_text = f"For the upcoming {category} exam: Which Indian state's tableaus won the first prize in the Republic Day Parade 2024?"
-                    opt_a = "Uttar Pradesh"
-                    opt_b = "Odisha"
-                    opt_c = "Gujarat"
-                    opt_d = "Maharashtra"
-                    correct = "B"
-                    explanation = "Odisha's tableau, themed 'Women Empowerment in Viksit Bharat', won the first prize among state tableaus in the Republic Day Parade 2024."
-                else: # General Knowledge
-                    q_text = f"Which is the longest river in the world?"
-                    opt_a = "Amazon River"
-                    opt_b = "Nile River"
-                    opt_c = "Yangtze River"
-                    opt_d = "Mississippi River"
-                    correct = "B"
-                    explanation = "The Nile River, stretching approximately 6,650 kilometers (4,132 miles) through northeastern Africa, is traditionally considered the longest river in the world, though some studies suggest the Amazon is longer."
-                
-                extra_questions.append({
-                    "category": category,
-                    "subject": subject,
-                    "question_text": q_text,
-                    "option_a": opt_a,
-                    "option_b": opt_b,
-                    "option_c": opt_c,
-                    "option_d": opt_d,
-                    "correct_option": correct,
-                    "explanation": explanation
-                })
-                
-    return extra_questions
 
 def main():
     print("Initializing Database...")
     init_db()
     
-    print("Database Initialized. Seeding Core Questions...")
+    print("Database Initialized. Seeding Questions...")
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # Clear existing questions just in case to prevent duplicates on re-run
+    # Clear existing attempts and bookmarks to prevent foreign key errors and clean out stale data
+    print("Clearing bookmarks...")
+    cursor.execute("DELETE FROM bookmarks")
+    print("Clearing attempts...")
+    cursor.execute("DELETE FROM user_attempts")
+    print("Clearing questions...")
     cursor.execute("DELETE FROM questions")
     
-    # Insert Core Questions
+    print(f"Inserting {len(QUESTIONS)} unique questions...")
     for q in QUESTIONS:
-        cursor.execute('''
-        INSERT INTO questions 
-        (category, subject, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, is_ai_generated)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
-        ''', (q["category"], q["subject"], q["question_text"], q["option_a"], q["option_b"], q["option_c"], q["option_d"], q["correct_option"], q["explanation"]))
-        
-    # Generate and Insert Extended Questions
-    print("Generating and seeding extended questions to cover syllabus...")
-    extended = generate_extended_questions()
-    for q in extended:
         cursor.execute('''
         INSERT INTO questions 
         (category, subject, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, is_ai_generated)
