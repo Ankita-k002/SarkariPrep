@@ -33,7 +33,8 @@ It features streak tracking, quiz statistics, detailed answer history, bookmarki
 │   └── sw.js               # Service Worker for local caching
 ├── app.py                  # Flask application routes
 ├── database.py             # SQLite (Local) / PostgreSQL (Cloud) hybrid database wrapper
-├── seed_questions.py       # Seed script with 160+ competitive exam questions
+├── seed_questions.py       # Seed script with 250+ clean competitive exam questions
+├── generate_1000_questions.py # Script to generate and seed 1000+ Current Affairs questions via Gemini
 ├── requirements.txt        # Backend dependencies
 └── vercel.json             # Vercel deployment routes config
 ```
@@ -96,3 +97,19 @@ To seed the cloud Postgres database with questions, run the seed script locally 
    python seed_questions.py
    ```
    *(This connects to the cloud database and seeds it with all the questions).*
+
+### Step 5: Generate 1,000+ Factual Current Affairs Questions
+To expand your database with 1,000+ additional Indian competitive exam Current Affairs questions (factual, preface-free, and updated through 2025/2026):
+1. Obtain a free **Gemini API Key** from [Google AI Studio](https://aistudio.google.com/).
+2. Run the generator script pointing to your database (either local SQLite or Vercel Postgres by setting the appropriate connection environment variable):
+   ```bash
+   # For Local SQLite:
+   $env:GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
+   python generate_1000_questions.py
+
+   # For Cloud Vercel Postgres:
+   $env:GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
+   $env:DATABASE_URL="YOUR_VERCEL_POSTGRES_CONNECTION_STRING"
+   python generate_1000_questions.py
+   ```
+   *(This runs 50 batches of 20 questions each across 50 major Current Affairs categories and inserts them directly into the database, respecting API rate limits).*
