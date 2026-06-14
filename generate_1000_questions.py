@@ -75,14 +75,15 @@ TOPICS = [
     "International financial institutions, loans approved to India by ADB, NDB, and World Bank in 2025-2026"
 ]
 
-def generate_batch(topic, batch_num, total_batches):
+def generate_batch(topic, topic_idx, total_topics, sub_idx):
     prompt = (
-        f"Generate exactly 20 highly relevant, unique multiple choice questions (MCQs) for Indian government competitive exams "
-        f"on the Current Affairs topic: '{topic}'. The questions should focus on events, policies, and developments from 2025 and 2026.\n\n"
+        f"Generate exactly 10 highly relevant, unique multiple choice questions (MCQs) for Indian government competitive exams "
+        f"on the Current Affairs topic: '{topic}' (Part {sub_idx} of 2).\n"
+        f"The questions should focus on significant, factual developments and events from 2025 and 2026.\n\n"
         f"CRITICAL REQUIREMENTS:\n"
         f"1. The 'question_text' must contain ONLY the direct question. Do not prefix or start the question with any exam references like 'Regarding UPSC:', 'For Banking exam:', or similar context phrases.\n"
         f"2. Categorize each question into the most appropriate exam category: 'UPSC', 'SSC', 'Banking', 'Railways', 'State PSC', or 'General' based on its complexity and nature.\n"
-        f"3. You MUST respond ONLY with a valid JSON array of exactly 20 objects. Do not include any introductory or concluding text, only the JSON block.\n\n"
+        f"3. You MUST respond ONLY with a valid JSON array of exactly 10 objects. Do not include any introductory or concluding text, only the JSON block.\n\n"
         f"JSON schema:\n"
         f"[\n"
         f"  {{\n"
@@ -109,18 +110,21 @@ def generate_batch(topic, batch_num, total_batches):
         }
     }
     
-    print(f"[{batch_num}/{total_batches}] Requesting 20 questions for: {topic}...")
+    print(f"[{topic_idx}/{total_topics}] (Part {sub_idx}/2) Requesting 10 questions for: {topic}...")
+    sys.stdout.flush() # Force flush to make sure it writes to log immediately
     
     # Retry logic
     for attempt in range(3):
         try:
-            response = requests.post(url, headers=headers, json=payload, timeout=30)
+            response = requests.post(url, headers=headers, json=payload, timeout=60)
             if response.status_code == 429:
                 print("  Rate limit reached (429). Sleeping 15 seconds...")
+                sys.stdout.flush()
                 time.sleep(15)
                 continue
             if response.status_code != 200:
                 print(f"  API returned error {response.status_code}: {response.text}. Retrying...")
+                sys.stdout.flush()
                 time.sleep(5)
                 continue
                 
@@ -151,61 +155,67 @@ def generate_batch(topic, batch_num, total_batches):
             
         except Exception as e:
             print(f"  Attempt {attempt+1} failed with error: {e}")
+            sys.stdout.flush()
             time.sleep(5)
             
     print(f"  Failed to generate batch for topic after 3 attempts.")
+    sys.stdout.flush()
     return []
 
 def main():
-    total_batches = len(TOPICS)
-    print(f"Starting generation of 1000 current affairs questions across {total_batches} topics.")
+    total_topics = len(TOPICS)
+    print(f"Starting generation of 1000 current affairs questions across {total_topics} topics (2 sub-batches of 10 questions per topic).")
     print(f"Target Database: {'PostgreSQL (Neon)' if database.IS_POSTGRES else 'SQLite (Local)'}")
+    sys.stdout.flush()
     
     conn = database.get_db_connection()
     cursor = conn.cursor()
     
     total_inserted = 0
     
-    for idx, topic in enumerate(TOPICS, 1):
-        questions = generate_batch(topic, idx, total_batches)
-        if not questions:
-            continue
-            
-        inserted_in_batch = 0
-        for q in questions:
-            try:
-                # We save all these under subject = 'Current Affairs'
-                cursor.execute('''
-                INSERT INTO questions 
-                (category, subject, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, is_ai_generated)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
-                ''', (
-                    q["category"],
-                    "Current Affairs",
-                    q["question_text"],
-                    q["option_a"],
-                    q["option_b"],
-                    q["option_c"],
-                    q["option_d"],
-                    q["correct_option"],
-                    q["explanation"]
-                ))
-                inserted_in_batch += 1
-            except Exception as e:
-                # In case of duplicate or format error
-                pass
+    for topic_idx, topic in enumerate(TOPICS, 1):
+        for sub_idx in [1, 2]:
+            questions = generate_batch(topic, topic_idx, total_topics, sub_idx)
+            if not questions:
+                continue
                 
-        conn.commit()
-        total_inserted += inserted_in_batch
-        print(f"  Successfully inserted {inserted_in_batch} questions. (Total so far: {total_inserted})")
-        
-        # Respect Gemini API rate limit: wait 4 seconds before the next call
-        time.sleep(4)
+            inserted_in_batch = 0
+            for q in questions:
+                try:
+                    # We save all these under subject = 'Current Affairs'
+                    cursor.execute('''
+                    INSERT INTO questions 
+                    (category, subject, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, is_ai_generated)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+                    ''', (
+                        q["category"],
+                        "Current Affairs",
+                        q["question_text"],
+                        q["option_a"],
+                        q["option_b"],
+                        q["option_c"],
+                        q["option_d"],
+                        q["correct_option"],
+                        q["explanation"]
+                    ))
+                    inserted_in_batch += 1
+                except Exception as e:
+                    # In case of duplicate or format error
+                    pass
+                    
+            conn.commit()
+            total_inserted += inserted_in_batch
+            print(f"  (Part {sub_idx}/2) Successfully inserted {inserted_in_batch} questions. (Total so far: {total_inserted})")
+            sys.stdout.flush()
+            
+            # Respect Gemini API rate limit: wait 4 seconds before the next call
+            time.sleep(4)
         
     conn.close()
     print("\n============================================")
     print(f"Generation complete! Inserted {total_inserted} new questions into the database.")
     print("============================================")
+    sys.stdout.flush()
 
 if __name__ == "__main__":
     main()
