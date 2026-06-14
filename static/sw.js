@@ -1,9 +1,11 @@
-const CACHE_NAME = "sarkariprep-v2";
+const CACHE_NAME = "sarkariprep-v3";
 const ASSETS_TO_CACHE = [
   "/",
   "/static/css/style.css",
   "/static/js/app.js",
   "/static/img/study_banner.png",
+  "/static/img/icon-192.png",
+  "/static/img/icon-512.png",
   "/static/manifest.json"
 ];
 
