@@ -120,8 +120,8 @@
                                         <p class="promo-desc">AI-curated MCQs across all subjects. Unlimited.</p>
                                         <button class="btn-promo">Start now <i class="fa-solid fa-arrow-right"></i></button>
                                     </div>
-                                    <div class="promo-image-container">
-                                        <img src="{{ url_for('static', filename='img/study_banner.png') }}" alt="Study Banner" class="promo-image">
+                                    <div class="promo-decor-icon">
+                                        <i class="fa-solid fa-graduation-cap"></i>
                                     </div>
                                 </div>
 
@@ -203,10 +203,6 @@
                             </div>
 
                             <div class="panel-scrollable quiz-body">
-                                <!-- AI generated badge indicator -->
-                                <div class="ai-badge-row" id="ai-pill-indicator" style="display:none;">
-                                    <span class="ai-pill"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Generated MCQ</span>
-                                </div>
 
                                 <!-- Question Card -->
                                 <div class="question-container">
@@ -341,40 +337,10 @@
                             </div>
 
                             <div class="panel-scrollable settings-scrollable">
-                                <div class="settings-group">
-                                    <h3>Question Sourcing Settings</h3>
-                                    
-                                    <div class="setting-row">
-                                        <div class="setting-info">
-                                            <span class="setting-title">Enable AI Question Generation</span>
-                                            <span class="setting-desc">Use large language models to generate new questions dynamically.</span>
-                                        </div>
-                                        <label class="switch">
-                                            <input type="checkbox" id="settings-ai-toggle" onchange="toggleAIFieldVisibility()">
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </div>
-
-                                    <div class="input-group" id="gemini-key-container" style="display:none;">
-                                        <label for="settings-gemini-key">GEMINI API KEY</label>
-                                        <div class="input-wrapper">
-                                            <input type="password" id="settings-gemini-key" placeholder="Enter Gemini API Key">
-                                            <button type="button" class="password-toggle" onclick="toggleSettingsKeyVisibility()">
-                                                <i class="fa-regular fa-eye" id="settings-key-eye-icon"></i>
-                                            </button>
-                                        </div>
-                                        <span class="input-help">This key is saved locally to authorize requests to Gemini 2.5 Flash.</span>
-                                    </div>
-                                </div>
-
                                 <div class="settings-group text-center">
                                     <h3>User Info</h3>
                                     <p class="user-profile-details">Logged in as: <strong id="settings-username">User</strong></p>
                                     <button class="btn-secondary" onclick="handleLogout()">Log out Account</button>
-                                </div>
-
-                                <div class="settings-save-row">
-                                    <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
                                 </div>
                             </div>
                         </div>

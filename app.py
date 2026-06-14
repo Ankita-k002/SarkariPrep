@@ -99,53 +99,9 @@ def get_question():
     category = request.args.get('category', 'General')
     subject = request.args.get('subject', '')
     
-    # Check user settings for AI generation
-    settings = database.get_user_settings(user_id)
-    use_ai = settings.get("use_ai_generation", 0) == 1
-    api_key = settings.get("gemini_api_key", "").strip()
+    # Fetch from seeded database directly
+    question = database.get_random_question(category, subject, user_id)
     
-    question = None
-    
-    if use_ai and api_key:
-        # Attempt to generate an AI question
-        try:
-            generated_data = generate_ai_question(category, subject, api_key)
-            if generated_data:
-                # Add to local database so it gets an ID and can be bookmarked/tracked
-                q_id = database.add_question(
-                    category=category,
-                    subject=subject or "General Knowledge",
-                    question_text=generated_data["question_text"],
-                    option_a=generated_data["option_a"],
-                    option_b=generated_data["option_b"],
-                    option_c=generated_data["option_c"],
-                    option_d=generated_data["option_d"],
-                    correct_option=generated_data["correct_option"],
-                    explanation=generated_data["explanation"],
-                    is_ai=1
-                )
-                question = {
-                    "id": q_id,
-                    "category": category,
-                    "subject": subject or "General Knowledge",
-                    "question_text": generated_data["question_text"],
-                    "option_a": generated_data["option_a"],
-                    "option_b": generated_data["option_b"],
-                    "option_c": generated_data["option_c"],
-                    "option_d": generated_data["option_d"],
-                    "correct_option": generated_data["correct_option"],
-                    "explanation": generated_data["explanation"],
-                    "is_ai_generated": 1,
-                    "is_bookmarked": 0
-                }
-        except Exception as e:
-            # Print error log and fall back to local database
-            print(f"AI Generation failed, falling back to local DB: {e}")
-            
-    if not question:
-        # Fetch from seeded database
-        question = database.get_random_question(category, subject, user_id)
-        
     if not question:
         # If no questions match the filter, try fetching any general question
         question = database.get_random_question("General", None, user_id)

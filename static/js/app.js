@@ -283,15 +283,6 @@ function fetchQuestion() {
     // Disable clicks during load
     optButtons.forEach(btn => btn.classList.add('disabled'));
     
-    // Check settings if AI is active and show loading text appropriately
-    fetch('/api/user/settings')
-    .then(res => res.json())
-    .then(data => {
-        if (data.success && data.settings && data.settings.use_ai_generation && data.settings.has_api_key) {
-            document.getElementById('quiz-question-text').innerText = 'AI model is constructing a customized MCQ question...';
-        }
-    })
-    .catch(() => {});
 
     // Request actual question
     let url = `/api/quiz/question?category=${encodeURIComponent(selectedExam)}`;
@@ -317,10 +308,6 @@ function fetchQuestion() {
             document.getElementById('opt-C-text').innerText = currentQuestion.option_c;
             document.getElementById('opt-D-text').innerText = currentQuestion.option_d;
             
-            // Toggle AI indicator badge
-            if (currentQuestion.is_ai_generated) {
-                document.getElementById('ai-pill-indicator').style.display = 'flex';
-            }
             
             // Set bookmark icon status
             updateBookmarkIcon(currentQuestion.is_bookmarked === 1);
@@ -668,87 +655,7 @@ function loadStatsDashboard() {
 // --- SETTINGS PANEL CONTROLLER ---
 
 function loadSettings() {
-    fetch('/api/user/settings')
-    .then(res => res.json())
-    .then(data => {
-        if (data.success && data.settings) {
-            const settings = data.settings;
-            document.getElementById('settings-ai-toggle').checked = settings.use_ai_generation;
-            
-            const geminiInput = document.getElementById('settings-gemini-key');
-            if (settings.has_api_key) {
-                geminiInput.placeholder = `Masked key: ${settings.masked_api_key}`;
-                geminiInput.value = ''; // Don't write masked placeholder to value
-            } else {
-                geminiInput.placeholder = 'Enter Gemini API Key';
-                geminiInput.value = '';
-            }
-            
-            toggleAIFieldVisibility();
-        }
-    })
-    .catch(err => console.error("Settings load error: ", err));
-}
-
-function toggleAIFieldVisibility() {
-    const isChecked = document.getElementById('settings-ai-toggle').checked;
-    const keyContainer = document.getElementById('gemini-key-container');
-    if (isChecked) {
-        keyContainer.style.display = 'flex';
-    } else {
-        keyContainer.style.display = 'none';
+    if (activeUser) {
+        document.getElementById('settings-username').innerText = activeUser.name;
     }
-}
-
-function toggleSettingsKeyVisibility() {
-    const keyInput = document.getElementById('settings-gemini-key');
-    const eyeIcon = document.getElementById('settings-key-eye-icon');
-    
-    if (keyInput.type === 'password') {
-        keyInput.type = 'text';
-        eyeIcon.classList.remove('fa-eye');
-        eyeIcon.classList.add('fa-eye-slash');
-    } else {
-        keyInput.type = 'password';
-        eyeIcon.classList.remove('fa-eye-slash');
-        eyeIcon.classList.add('fa-eye');
-    }
-}
-
-function saveSettings() {
-    const use_ai_generation = document.getElementById('settings-ai-toggle').checked;
-    let gemini_api_key = document.getElementById('settings-gemini-key').value.trim();
-    
-    const saveBtn = document.querySelector('.settings-save-row button');
-    saveBtn.innerText = 'Saving...';
-    saveBtn.disabled = true;
-
-    // Check if key is left blank but had a value previously
-    // The endpoint will not overwrite key with blank if not input
-    fetch('/api/user/settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            use_ai_generation,
-            gemini_api_key
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        saveBtn.innerText = 'Save Settings';
-        saveBtn.disabled = false;
-        if (data.success) {
-            // Success alert message or animation
-            alert('Settings saved successfully!');
-            switchPanel('home');
-        } else {
-            alert('Error saving settings: ' + data.message);
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        saveBtn.innerText = 'Save Settings';
-        saveBtn.disabled = false;
-        alert('Could not save settings. Verify that Flask is running.');
-    });
 }

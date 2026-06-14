@@ -615,26 +615,20 @@ body {
     background-color: var(--primary);
 }
 
-.promo-image-container {
-    flex: 0.8;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+.promo-decor-icon {
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    font-size: 110px;
+    color: rgba(255, 255, 255, 0.08);
+    transform: rotate(-15deg);
+    pointer-events: none;
+    z-index: 1;
+    transition: transform 0.4s ease;
 }
 
-.promo-image {
-    width: 130px;
-    height: 130px;
-    object-fit: contain;
-    border-radius: var(--radius-md);
-    transform: rotate(2deg);
-    filter: drop-shadow(0 8px 12px rgba(0,0,0,0.15));
-    transition: transform var(--transition-fast);
-}
-
-.promo-card:hover .promo-image {
-    transform: scale(1.05) rotate(0deg);
+.promo-card:hover .promo-decor-icon {
+    transform: rotate(-5deg) scale(1.08);
 }
 
 /* Stats Row */
