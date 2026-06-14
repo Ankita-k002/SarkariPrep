@@ -118,9 +118,9 @@ def generate_batch(topic, topic_idx, total_topics, sub_idx):
         try:
             response = requests.post(url, headers=headers, json=payload, timeout=60)
             if response.status_code == 429:
-                print("  Rate limit reached (429). Sleeping 15 seconds...")
+                print("  Rate limit reached (429). Sleeping 30 seconds to reset quota...")
                 sys.stdout.flush()
-                time.sleep(15)
+                time.sleep(30)
                 continue
             if response.status_code != 200:
                 print(f"  API returned error {response.status_code}: {response.text}. Retrying...")
@@ -208,8 +208,8 @@ def main():
             print(f"  (Part {sub_idx}/2) Successfully inserted {inserted_in_batch} questions. (Total so far: {total_inserted})")
             sys.stdout.flush()
             
-            # Respect Gemini API rate limit: wait 4 seconds before the next call
-            time.sleep(4)
+            # Respect Gemini API rate limit: wait 10 seconds before the next call
+            time.sleep(10)
         
     conn.close()
     print("\n============================================")
