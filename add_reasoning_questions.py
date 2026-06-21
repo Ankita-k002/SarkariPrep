@@ -175,7 +175,7 @@ PREDEFINED_REASONING = [
 ]
 
 def generate_ai_batch(api_key, count=10):
-    """Call Gemini to generate a batch of unique reasoning MCQs."""
+    """Call OpenRouter to generate a batch of unique reasoning MCQs using google/gemini-2.5-flash."""
     prompt = (
         f"Generate exactly {count} highly relevant, unique multiple choice questions (MCQs) on the subject: 'Reasoning' "
         f"(Logical Reasoning, Analytical Reasoning, Syllogisms, Blood Relations, Number Series, Coding-Decoding, or Direction Sense) "
@@ -183,37 +183,47 @@ def generate_ai_batch(api_key, count=10):
         f"CRITICAL REQUIREMENTS:\n"
         f"1. The 'question_text' must contain ONLY the direct question. Do not prefix or start the question with any exam references like 'Regarding UPSC CSAT:', 'For Banking exam:', or similar context phrases.\n"
         f"2. Categorize each question into the most appropriate exam category: 'UPSC', 'SSC', 'Banking', 'Railways', 'State PSC', or 'General' based on its complexity and nature.\n"
-        f"3. You MUST respond ONLY with a valid JSON array of exactly {count} objects. Do not include any introductory or concluding text, only the JSON block.\n\n"
+        f"3. Keep the 'explanation' concise (under 80 words) and direct. Do not write lengthy debates or meta-analyses.\n"
+        f"4. You MUST respond ONLY with a valid JSON object containing a 'questions' key which is a list of exactly {count} objects. Do not include any introductory or concluding text, only the JSON block.\n\n"
         f"JSON schema:\n"
-        f"[\n"
-        f"  {{\n"
-        f"    \"category\": \"one of the 6 categories listed above\",\n"
-        f"    \"question_text\": \"The direct question text here\",\n"
-        f"    \"option_a\": \"Text for option A\",\n"
-        f"    \"option_b\": \"Text for option B\",\n"
-        f"    \"option_c\": \"Text for option C\",\n"
-        f"    \"option_d\": \"Text for option D\",\n"
-        f"    \"correct_option\": \"A\" or \"B\" or \"C\" or \"D\",\n"
-        f"    \"explanation\": \"Provide a thorough explanation explaining the step-by-step reasoning logic and why the chosen option is correct.\"\n"
-        f"  }}\n"
-        f"]"
+        f"{{\n"
+        f"  \"questions\": [\n"
+        f"    {{\n"
+        f"      \"category\": \"one of the 6 categories listed above\",\n"
+        f"      \"question_text\": \"The direct question text here\",\n"
+        f"      \"option_a\": \"Text for option A\",\n"
+        f"      \"option_b\": \"Text for option B\",\n"
+        f"      \"option_c\": \"Text for option C\",\n"
+        f"      \"option_d\": \"Text for option D\",\n"
+        f"      \"correct_option\": \"A\" or \"B\" or \"C\" or \"D\",\n"
+        f"      \"explanation\": \"Step-by-step reasoning logic under 80 words. Do not use unescaped double quotes inside this string.\"\n"
+        f"    }}\n"
+        f"  ]\n"
+        f"}}"
     )
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
-    headers = {"Content-Type": "application/json"}
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://study-helper-gamma-sage.vercel.app",
+        "X-Title": "SarkariPrep"
+    }
     payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"responseMimeType": "application/json"}
+        "model": "openrouter/free",
+        "messages": [{"role": "user", "content": prompt}],
+        "response_format": {"type": "json_object"},
+        "max_tokens": 2500
     }
 
     try:
         response = requests.post(url, headers=headers, json=payload, timeout=60)
         if response.status_code != 200:
-            print(f"  Gemini API returned error {response.status_code}: {response.text}")
+            print(f"  OpenRouter API returned error {response.status_code}: {response.text}")
             return []
 
         res_json = response.json()
-        text = res_json['candidates'][0]['content']['parts'][0]['text'].strip()
+        text = res_json['choices'][0]['message']['content'].strip()
 
         # Clean markdown wrappers if returned
         if "```json" in text:
@@ -221,12 +231,21 @@ def generate_ai_batch(api_key, count=10):
         elif "```" in text:
             text = text.split("```")[1].split("```")[0].strip()
 
-        data = json.loads(text)
-        if not isinstance(data, list):
-            return []
+        data = json.loads(text, strict=False)
+        questions_list = []
+        if isinstance(data, dict):
+            if "questions" in data and isinstance(data["questions"], list):
+                questions_list = data["questions"]
+            else:
+                for k, v in data.items():
+                    if isinstance(v, list):
+                        questions_list = v
+                        break
+        elif isinstance(data, list):
+            questions_list = data
 
         valid = []
-        for item in data:
+        for item in questions_list:
             required = ["category", "question_text", "option_a", "option_b", "option_c", "option_d", "correct_option", "explanation"]
             if all(k in item for k in required):
                 item["correct_option"] = item["correct_option"].strip().upper()
@@ -324,7 +343,7 @@ def main():
 
     generated_total = 0
     while current_count < target_count:
-        batch_size = min(10, target_count - current_count)
+        batch_size = min(2, target_count - current_count)
         print(f"Requesting {batch_size} questions from Gemini...")
         questions = generate_ai_batch(api_key, batch_size)
         if not questions:
