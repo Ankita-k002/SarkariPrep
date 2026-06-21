@@ -723,6 +723,7 @@ body {
 .banking-color { background-color: #ede7f6; color: #5e35b1; }
 .railways-color { background-color: #f3e5f5; color: #8e24aa; }
 .psc-color { background-color: #f1f8e9; color: #7cb342; }
+.geography-color { background-color: #e0f7fa; color: #00838f; }
 
 .exam-name {
     font-family: var(--font-title);

@@ -331,6 +331,11 @@ def get_random_question(category=None, subject=None, user_id=None):
     conn = get_db_connection()
     cursor = conn.cursor()
     
+    # If category is a subject, map it to a subject filter and clear category constraint
+    if category == 'Geography':
+        subject = 'Geography'
+        category = None
+        
     params = []
     conditions = []
     
