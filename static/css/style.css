@@ -724,6 +724,7 @@ body {
 .railways-color { background-color: #f3e5f5; color: #8e24aa; }
 .psc-color { background-color: #f1f8e9; color: #7cb342; }
 .geography-color { background-color: #e0f7fa; color: #00838f; }
+.reasoning-color { background-color: #fce4ec; color: #c2185b; }
 
 .exam-name {
     font-family: var(--font-title);

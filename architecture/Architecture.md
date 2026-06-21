@@ -101,4 +101,4 @@ The database supports hybrid structures (SQLite/PostgreSQL mappings). Below are 
 * [[API Documentation]]
 * [[Change Logs]]
 
-Generated at: 2026-06-21 13:07:45
+Generated at: 2026-06-21 14:09:10
