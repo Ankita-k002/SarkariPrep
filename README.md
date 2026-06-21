@@ -113,3 +113,56 @@ To expand your database with 1,000+ additional Indian competitive exam Current A
    python generate_1000_questions.py
    ```
    *(This runs 50 batches of 20 questions each across 50 major Current Affairs categories and inserts them directly into the database, respecting API rate limits).*
+
+---
+
+## 📚 Knowledge Management & Documentation (Obsidian Vault)
+
+This project integrates **Obsidian** as its primary developer documentation and knowledge management layer. The entire root repository acts as an Obsidian vault.
+
+### 📁 Vault Directory Structure
+
+* **`/docs`**: General project manuals, API definitions, template files, and change logs.
+  * `docs/templates/`: Reusable document skeletons (Feature requests, bug reports, ADRs, etc.).
+* **`/architecture`**: System architectural layouts, component structure flowcharts, and database schemas.
+* **`/knowledge`**: Deep technical documentation, guidelines, and developer guides.
+* **`/meeting-notes`**: Notes from team syncs, sprint planning, and retrospectives.
+* **`/prompts`**: AI engineering prompts used by the generator or for developer assistance.
+* **`/tasks`**: Interactive sprint task lists.
+* **`/.obsidian`**: Config files enabling core templates and pointing to the `docs/templates` directory.
+
+### ⚙️ Automated Documentation Generator
+
+Documentation files are auto-generated directly from the source code by running the `doc_manager.py` script. The script:
+1. Parses `app.py` AST to extract all Flask routes, HTTP methods, and handlers.
+2. Scans `database.py` parenthesis structures to extract SQLite & Postgres schemas.
+3. Map frontend caller actions from `static/js/app.js` to their backend endpoints.
+4. Auto-generates `docs/Project Overview.md`, `architecture/Architecture.md`, and `docs/API Documentation.md` with Obsidian internal links (e.g. `[[API Documentation]]`).
+
+#### Commands:
+* **Regenerate Documentation**:
+  ```bash
+  python doc_manager.py
+  ```
+* **Git-Integrated Changelog (Diff mode)**:
+  Scans modified files since the last commit, maps them to impacted documents, and appends a structured summary to `docs/Change Logs.md`:
+  ```bash
+  python doc_manager.py --git-diff
+  ```
+* **Install Git Pre-commit Hook**:
+  Installs a git pre-commit hook that automatically updates the changelog whenever you commit:
+  ```bash
+  python doc_manager.py --install-hook
+  ```
+
+### 📝 Using Vault Templates in Obsidian
+
+To draft new design decisions or report issues, use the standardized templates in `docs/templates/` inside Obsidian:
+1. Open Obsidian and select **Open folder as vault**. Choose this project's root folder.
+2. The core **Templates** plugin is auto-enabled and configured via `.obsidian/`.
+3. Create a new note, press `Alt + T` (or open command palette and type `Insert template`), and choose from:
+   * `Feature Request Template` — To draft user requirements and specifications.
+   * `Bug Report Template` — To document defects and reproduction steps.
+   * `Technical Decision Template` — Architecture Decision Records (ADRs) to capture tech decisions.
+   * `Sprint Notes Template` — To record meeting details and retrospective items.
+   * `AI Prompt Template` — For registering and engineering AI instructions.

@@ -271,7 +271,10 @@ function fetchQuestion() {
     });
     
     document.getElementById('explanation-drawer').style.display = 'none';
-    document.getElementById('ai-pill-indicator').style.display = 'none';
+    const aiPill = document.getElementById('ai-pill-indicator');
+    if (aiPill) {
+        aiPill.style.display = 'none';
+    }
     
     // Show loading shimmers / loader
     document.getElementById('quiz-question-text').innerText = 'Searching for standard question details...';

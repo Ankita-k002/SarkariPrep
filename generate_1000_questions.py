@@ -190,7 +190,7 @@ def main():
         print(f"Warning: Could not connect to SQLite: {e}")
         
     # 2. Connect to Postgres
-    postgres_url = os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL") or 'postgresql://user:password@host/neondb?channel_binding=require&sslmode=require'
+    postgres_url = os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL")
     try:
         import psycopg2
         from database import PostgresConnectionWrapper
