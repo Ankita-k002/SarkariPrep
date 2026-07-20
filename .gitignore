@@ -7,7 +7,6 @@ venv/
 .gemini/
 task.md
 implementation_plan.md
-walkthrough.md
-*.webp
-*.png
-*.jpg
+!docs/screenshots/*
+!static/img/*
+
