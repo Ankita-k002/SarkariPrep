@@ -1,10 +1,10 @@
 # 🚀 SarkariPrep - AI-Assisted Current Affairs Quiz Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Live WebApp](https://img.shields.io/badge/Live%20App-Try%20SarkariPrep-brightgreen?style=for-the-badge&logo=vercel)](https://study-helper.vercel.app)
+[![Live WebApp](https://img.shields.io/badge/Live%20App-Try%20SarkariPrep-brightgreen?style=for-the-badge&logo=vercel)](https://sarkariprep-app.vercel.app)
 
-👉 **[Click Here to Launch the Live Web App](https://study-helper.vercel.app)**  
-*(Alternative URL: [https://study-helper-ankita-k002.vercel.app](https://study-helper-ankita-k002.vercel.app))*
+👉 **[Click Here to Launch the Live Web App](https://sarkariprep-app.vercel.app)**  
+
 
 ---
 
