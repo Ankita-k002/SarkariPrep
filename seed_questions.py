@@ -2769,6 +2769,27 @@ QUESTIONS = [
     }
 ]
 
+def auto_seed_questions(cursor):
+    """Automatically insert missing seed questions into the database if not present."""
+    from add_reasoning_questions import REASONING_PYQ_BANK
+    from add_geography_questions import GEO_QUESTIONS
+    from add_current_affairs_2025 import CURRENT_AFFAIRS_2025_2026
+
+    all_q = QUESTIONS + REASONING_PYQ_BANK + GEO_QUESTIONS + CURRENT_AFFAIRS_2025_2026
+
+    for q in all_q:
+        cursor.execute("SELECT 1 FROM questions WHERE question_text = ?", (q["question_text"],))
+        if not cursor.fetchone():
+            cursor.execute('''
+            INSERT INTO questions 
+            (category, subject, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, is_ai_generated)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+            ''', (
+                q["category"], q["subject"], q["question_text"],
+                q["option_a"], q["option_b"], q["option_c"], q["option_d"],
+                q["correct_option"], q["explanation"]
+            ))
+
 def main():
     print("Initializing Database...")
     init_db()
@@ -2777,22 +2798,7 @@ def main():
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # Clear existing attempts and bookmarks to prevent foreign key errors and clean out stale data
-    print("Clearing bookmarks...")
-    cursor.execute("DELETE FROM bookmarks")
-    print("Clearing attempts...")
-    cursor.execute("DELETE FROM user_attempts")
-    print("Clearing questions...")
-    cursor.execute("DELETE FROM questions")
-    
-    print(f"Inserting {len(QUESTIONS)} unique questions...")
-    for q in QUESTIONS:
-        cursor.execute('''
-        INSERT INTO questions 
-        (category, subject, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, is_ai_generated)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
-        ''', (q["category"], q["subject"], q["question_text"], q["option_a"], q["option_b"], q["option_c"], q["option_d"], q["correct_option"], q["explanation"]))
-        
+    auto_seed_questions(cursor)
     conn.commit()
     
     # Check question count
@@ -2804,3 +2810,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

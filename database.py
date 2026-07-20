@@ -227,7 +227,17 @@ def init_db():
         ''')
         
     conn.commit()
+
+    # Automatically seed questions if any are missing
+    try:
+        from seed_questions import auto_seed_questions
+        auto_seed_questions(cursor)
+        conn.commit()
+    except Exception as e:
+        print(f"[WARN] Auto-seeding questions encountered an issue: {e}")
+
     conn.close()
+
 
 def hash_password(password):
     return hashlib.sha256(password.encode('utf-8')).hexdigest()

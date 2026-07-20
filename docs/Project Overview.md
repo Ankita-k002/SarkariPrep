@@ -41,4 +41,4 @@ To check files modified since last commit and write them to the change log:
 python doc_manager.py --git-diff
 ```
 
-Generated at: 2026-06-21 21:35:17
+Generated at: 2026-07-20 23:29:51
