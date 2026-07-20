@@ -149,4 +149,4 @@ For database tables and backend source descriptions, see [[Architecture]].
 * [[Project Overview]]
 * [[Architecture]]
 
-Generated at: 2026-07-21 00:26:54
+Generated at: 2026-07-21 00:27:24
