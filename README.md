@@ -50,11 +50,12 @@ The goal wasn't just to generate questions—it was to create an experience wher
 
 | 📱 Authentication | 🏠 Home Dashboard |
 | :---: | :---: |
-| <img src="./docs/screenshots/login_screen.png" width="350" alt="Login Screen" /> | <img src="./docs/screenshots/home_dashboard.png" width="350" alt="Home Dashboard" /> |
+| <img src="docs/screenshots/login_screen.png" width="350" alt="Login Screen" /> | <img src="docs/screenshots/home_dashboard.png" width="350" alt="Home Dashboard" /> |
 
 | ✍️ Practice Quiz Interface | 📊 Detailed Analytics & Stats |
 | :---: | :---: |
-| <img src="./docs/screenshots/quiz_practice.png" width="350" alt="Quiz Practice" /> | <img src="./docs/screenshots/stats_dashboard.png" width="350" alt="Stats Dashboard" /> |
+| <img src="docs/screenshots/quiz_practice.png" width="350" alt="Quiz Practice" /> | <img src="docs/screenshots/stats_dashboard.png" width="350" alt="Stats Dashboard" /> |
+
 
 ---
 
