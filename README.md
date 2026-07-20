@@ -13,7 +13,7 @@
 ---
 
 <!-- 📸 APP BANNER -->
-![SarkariPrep Banner](./static/img/study_banner.png)
+![SarkariPrep Banner](static/img/study_banner.png)
 
 ---
 
